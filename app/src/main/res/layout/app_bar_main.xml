@@ -22,12 +22,35 @@
 
     <include layout="@layout/content_main" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
+    <com.github.clans.fab.FloatingActionMenu
+            android:id="@+id/fab_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@android:drawable/ic_input_add" />
+            app:srcCompat="@android:drawable/ic_input_add">
+
+        <com.github.clans.fab.FloatingActionButton
+                app:fab_label="Pridėti treniruotę"
+                android:layout_width="wrap_content"
+                android:id="@+id/fab_create_training"
+                android:layout_height="wrap_content"
+                android:src="@drawable/fab_add" />
+
+        <com.github.clans.fab.FloatingActionButton
+                app:fab_label="Pridėti miegojimą"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fab_create_sleeping"
+                android:src="@drawable/fab_add" />
+
+        <com.github.clans.fab.FloatingActionButton
+                app:fab_label="Pridėti valgį"
+                android:id="@+id/fab_create_eating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/fab_add" />
+
+    </com.github.clans.fab.FloatingActionMenu>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

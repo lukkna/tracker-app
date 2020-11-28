@@ -11,13 +11,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import eu.vk.trackerapp.R;
 import eu.vk.trackerapp.ui.model.Item;
-
-import static java.util.Arrays.asList;
+import eu.vk.trackerapp.ui.storage.DatabaseProvider;
 
 /**
  * A fragment representing a list of Items.
@@ -32,6 +31,8 @@ public class ItemFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private RecyclerView view;
+    private ItemListAdapter adapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -40,7 +41,6 @@ public class ItemFragment extends Fragment {
     public ItemFragment() {
     }
 
-    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static ItemFragment newInstance(int columnCount) {
         ItemFragment fragment = new ItemFragment();
@@ -62,7 +62,7 @@ public class ItemFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+        view = (RecyclerView) inflater.inflate(R.layout.fragment_item_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -73,26 +73,24 @@ public class ItemFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new ItemListAdapter(getItems(), mListener));
+            adapter = new ItemListAdapter(getItems(), mListener);
+            recyclerView.setAdapter(adapter);
         }
         return view;
     }
 
-    private List<Item> getItems() {
-        return asList(
-                new Item(
-                        ZonedDateTime.parse("2020-11-22T09:00:00Z"),
-                        1,
-                        "Sportas"
-                ),
-                new Item(
-                        ZonedDateTime.parse("2020-11-22T10:00:00Z"),
-                        1,
-                        "Valgis"
-                )
-        );
+    @Override
+    public void onResume() {
+        adapter = new ItemListAdapter(getItems(), mListener);
+        view.setAdapter(adapter);
+        super.onResume();
     }
 
+    private List<Item> getItems() {
+        return DatabaseProvider.getInstance()
+                .itemDao()
+                .queryByDate(LocalDate.now().toString());
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -122,7 +120,6 @@ public class ItemFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onListFragmentInteraction(Item item);
     }
 }

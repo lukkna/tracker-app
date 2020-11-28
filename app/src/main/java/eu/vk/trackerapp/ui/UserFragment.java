@@ -69,11 +69,8 @@ public class UserFragment extends DialogFragment {
             etAge.setText(String.valueOf(user.age));
             etWeight.setText(String.valueOf(user.weight));
 
-            if (user.male)
+            if (!user.male)
                 rbFemale.toggle();
-            else
-                rbMale.toggle();
-
         }
 
         super.onViewCreated(view, savedInstanceState);

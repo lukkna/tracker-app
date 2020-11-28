@@ -3,28 +3,34 @@ package eu.vk.trackerapp;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
-import eu.vk.trackerapp.ui.model.Item;
+import java.time.LocalDate;
+
+import eu.vk.trackerapp.ui.CreationFragment;
 import eu.vk.trackerapp.ui.ItemFragment;
+import eu.vk.trackerapp.ui.ItemListAdapter;
 import eu.vk.trackerapp.ui.UserFragment;
+import eu.vk.trackerapp.ui.model.Item;
+import eu.vk.trackerapp.ui.storage.DatabaseProvider;
 
 public class MainActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener {
-
     private AppBarConfiguration mAppBarConfiguration;
+    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,14 +38,20 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view ->
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        FloatingActionMenu fabMenu = findViewById(R.id.fab_menu);
+
+        FloatingActionButton fabTraining = findViewById(R.id.fab_create_training);
+        FloatingActionButton fabSleeping = findViewById(R.id.fab_create_sleeping);
+        FloatingActionButton fabEating = findViewById(R.id.fab_create_eating);
+
+        fabEating.setOnClickListener(v -> new CreationFragment()
+                .show(getSupportFragmentManager(), "MealCreation"));
+
+        drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
+
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_items, R.id.nav_gallery, R.id.nav_slideshow,
                 R.id.nav_tools, R.id.nav_share, R.id.nav_send)
@@ -75,6 +87,12 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
 
     @Override
     public void onListFragmentInteraction(Item item) {
-
+        new AlertDialog.Builder(this)
+                .setTitle("Ištrinti ar redaguoti")
+                .setMessage("Ištrinti įrašą ar redaguoti?")
+                .setPositiveButton("Redaguoti", (dialog, which) -> new CreationFragment(item).show(getSupportFragmentManager(), "MealEdit"))
+                .setNegativeButton("Ištrinti", (dialog, which) -> DatabaseProvider.getInstance().itemDao().delete(item))
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }

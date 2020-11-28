@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.format.DateTimeFormatter;
@@ -34,17 +35,14 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHo
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.tvItemTime.setText(mValues.get(position).getDateTime().format(TIME_FORMATTER));
-        holder.tvItemName.setText(mValues.get(position).getName());
+        holder.tvItemTime.setText(mValues.get(position).dateTime.format(TIME_FORMATTER));
+        holder.tvItemName.setText(mValues.get(position).title.replace("+", ": "));
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
-                }
+        holder.mView.setOnClickListener(v -> {
+            if (null != mListener) {
+                // Notify the active callbacks interface (the activity, if the
+                // fragment is attached to one) that an item has been selected.
+                mListener.onListFragmentInteraction(holder.mItem);
             }
         });
     }

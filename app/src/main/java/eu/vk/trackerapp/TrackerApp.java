@@ -11,7 +11,10 @@ public class TrackerApp extends Application {
     @Override
     public void onCreate() {
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "database-name").allowMainThreadQueries().build();
+                AppDatabase.class, "database-name")
+                .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
+                .build();
         DatabaseProvider.initDb(db);
 
         super.onCreate();
