@@ -1,17 +1,20 @@
 package eu.vk.trackerapp.ui;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
 
 import eu.vk.trackerapp.ListUpdateTracker;
@@ -20,6 +23,8 @@ import eu.vk.trackerapp.ui.model.Item;
 import eu.vk.trackerapp.ui.storage.DatabaseProvider;
 import io.reactivex.rxjava3.disposables.Disposable;
 
+import static eu.vk.trackerapp.ui.CurrentDateHolder.CURRENT_DATE;
+import static java.lang.String.format;
 import static java.util.Objects.nonNull;
 
 /**
@@ -37,6 +42,10 @@ public class ItemFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
     private RecyclerView view;
     private Disposable subscription;
+    private DatePickerDialog picker;
+    int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+    int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
+    int currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -63,26 +72,40 @@ public class ItemFragment extends Fragment {
         }
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = (RecyclerView) inflater.inflate(R.layout.fragment_item_list, container, false);
-
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            ItemListAdapter adapter = new ItemListAdapter(getItems(), mListener);
-            recyclerView.setAdapter(adapter);
-            subscription = ListUpdateTracker.getInstance().getUpdateTracker()
-                    .subscribe(bool -> recyclerView.setAdapter(new ItemListAdapter(getItems(), mListener)));
+        View root = inflater.inflate(R.layout.fragment_item_list, container, false);
+        view = root.findViewById(R.id.list);
+        AutoCompleteTextView acDate = root.findViewById(R.id.actv_date);
+        Context context = view.getContext();
+        if (mColumnCount <= 1) {
+            view.setLayoutManager(new LinearLayoutManager(context));
+        } else {
+            view.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
-        return view;
+        view.setAdapter(new ItemListAdapter(getItems(), mListener));
+        subscription = ListUpdateTracker.getInstance().getUpdateTracker()
+                .subscribe(bool -> view.setAdapter(new ItemListAdapter(getItems(), mListener)));
+
+        picker = new DatePickerDialog(
+                requireActivity(),
+                (v, year, month, dayOfMonth) -> {
+                    CURRENT_DATE = format("%s-%02d-%02d", year, month + 1, dayOfMonth);
+                    acDate.setText(CURRENT_DATE);
+                    currentYear = year;
+                    currentMonth = month;
+                    currentDay = dayOfMonth;
+                    this.view.setAdapter(new ItemListAdapter(getItems(), mListener));
+                },
+                currentYear,
+                currentMonth,
+                currentDay
+        );
+
+        acDate.setOnClickListener(view -> picker.show());
+        return root;
     }
 
     @Override
@@ -90,10 +113,11 @@ public class ItemFragment extends Fragment {
         super.onResume();
     }
 
+    @SuppressLint("DefaultLocale")
     private List<Item> getItems() {
         return DatabaseProvider.getInstance()
                 .itemDao()
-                .queryByDate(LocalDate.now().toString());
+                .queryByDate(CURRENT_DATE);
     }
 
     @Override

@@ -15,6 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Nuo"
+            android:focusableInTouchMode="false"
             android:paddingEnd="20dp"
             app:layout_constraintEnd_toStartOf="@+id/til_time_end"
             app:layout_constraintStart_toStartOf="parent"
@@ -23,6 +24,7 @@
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/actv_time_start"
                 style="?attr/spinnerDropDownItemStyle"
+                android:focusableInTouchMode="false"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/dropdownListPreferredItemHeight"
                 android:inputType="none"
@@ -37,6 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Iki"
+            android:focusableInTouchMode="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/til_time_start"
             app:layout_constraintTop_toTopOf="parent">
@@ -48,6 +51,7 @@
                 android:layout_height="?attr/dropdownListPreferredItemHeight"
                 android:inputType="none"
                 android:singleLine="true"
+                android:focusableInTouchMode="false"
                 android:text="07:00" />
 
     </com.google.android.material.textfield.TextInputLayout>

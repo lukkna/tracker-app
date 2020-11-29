@@ -23,6 +23,7 @@ import eu.vk.trackerapp.R;
 import eu.vk.trackerapp.ui.model.Item;
 import eu.vk.trackerapp.ui.storage.DatabaseProvider;
 
+import static eu.vk.trackerapp.ui.CurrentDateHolder.CURRENT_DATE;
 import static java.lang.String.format;
 import static java.util.Objects.nonNull;
 
@@ -52,7 +53,7 @@ public class SleepCreationFragment extends DialogFragment {
         btSave = root.findViewById(R.id.bt_save);
         btSave.setOnClickListener(v -> {
             if (nonNull(this.item)) {
-                item.date = LocalDate.now().toString();
+                item.date = CURRENT_DATE;
                 item.startTime = acTimeStart.getText().toString();
                 item.priority = 0;
                 item.title = "Miegas";
@@ -64,7 +65,7 @@ public class SleepCreationFragment extends DialogFragment {
                         .update(item);
             } else {
                 item = new Item(
-                        LocalDate.now().toString(),
+                        CURRENT_DATE,
                         acTimeStart.getText().toString(),
                         acTimeEnd.getText().toString(),
                         0,

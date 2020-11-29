@@ -25,6 +25,7 @@ import eu.vk.trackerapp.R;
 import eu.vk.trackerapp.ui.model.Item;
 import eu.vk.trackerapp.ui.storage.DatabaseProvider;
 
+import static eu.vk.trackerapp.ui.CurrentDateHolder.CURRENT_DATE;
 import static java.lang.String.format;
 import static java.util.Objects.nonNull;
 
@@ -58,7 +59,7 @@ public class MealCreationFragment extends DialogFragment {
 
         btSave.setOnClickListener(v -> {
             if (nonNull(this.item)) {
-                item.date = LocalDate.now().toString();
+                item.date = CURRENT_DATE;
                 item.startTime = acTime.getText().toString();
                 item.priority = 0;
                 item.title = "Valgis+" + acMealType.getText().toString();
@@ -69,7 +70,7 @@ public class MealCreationFragment extends DialogFragment {
                         .update(item);
             } else {
                 item = new Item(
-                        LocalDate.now().toString(),
+                        CURRENT_DATE,
                         acTime.getText().toString(),
                         null,
                         0,
