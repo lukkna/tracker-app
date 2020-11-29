@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,40 +27,37 @@ import eu.vk.trackerapp.ui.storage.DatabaseProvider;
 import static java.lang.String.format;
 import static java.util.Objects.nonNull;
 
-public class MealCreationFragment extends DialogFragment {
-    private static final String[] MEAL_TYPES = new String[]{"Paprastas", "Prieš sportą", "Po sporto"};
+public class WorkoutCreationFragment extends DialogFragment {
+    private static final String[] WORKOUT_TYPES = new String[]{"Krūtinė", "Rankos", "Kojos", "Nugara", "Kardio"};
     private Item item;
     private TimePickerDialog picker;
     private RadioButton rbRepeatEveryDay;
     private RadioButton rbRepeatEveryWeek;
-    private RadioGroup rgRepeat;
     private MaterialButton btSave;
 
-    public MealCreationFragment(Item item) {
+    public WorkoutCreationFragment(Item item) {
         this.item = item;
     }
 
-    public MealCreationFragment() {
+    public WorkoutCreationFragment() {
     }
 
     @SuppressLint({"DefaultLocale", "ClickableViewAccessibility"})
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_meal_creation, container, false);
-        AutoCompleteTextView acMealType = root.findViewById(R.id.actv_meal_type);
+        View root = inflater.inflate(R.layout.fragment_workout_creation, container, false);
+        AutoCompleteTextView acWorkoutType = root.findViewById(R.id.actv_workout_type);
         AutoCompleteTextView acTime = root.findViewById(R.id.actv_time);
         rbRepeatEveryDay = root.findViewById(R.id.radio_button_1);
         rbRepeatEveryWeek = root.findViewById(R.id.radio_button_2);
-        rgRepeat = root.findViewById(R.id.rg_repeat);
         btSave = root.findViewById(R.id.bt_save);
-
         btSave.setOnClickListener(v -> {
             if (nonNull(this.item)) {
                 item.date = LocalDate.now().toString();
                 item.startTime = acTime.getText().toString();
                 item.priority = 0;
-                item.title = "Valgis+" + acMealType.getText().toString();
+                item.title = "Treniruotė+" + acWorkoutType.getText().toString();
                 item.everyDay = rbRepeatEveryDay.isChecked();
                 item.everyWeek = rbRepeatEveryWeek.isChecked();
                 DatabaseProvider.getInstance()
@@ -73,7 +69,7 @@ public class MealCreationFragment extends DialogFragment {
                         acTime.getText().toString(),
                         null,
                         0,
-                        "Valgis+" + acMealType.getText().toString(),
+                        "Treniruotė+" + acWorkoutType.getText().toString(),
                         rbRepeatEveryDay.isChecked(),
                         rbRepeatEveryWeek.isChecked(),
                         false
@@ -96,21 +92,19 @@ public class MealCreationFragment extends DialogFragment {
                     (tp, sHour, sMinute) -> acTime.setText(format("%02d:%02d", sHour, sMinute)), hour, minutes, true);
             picker.show();
         });
-        acMealType.setAdapter(new ArrayAdapter<>(
+        acWorkoutType.setAdapter(new ArrayAdapter<>(
                 requireActivity(),
                 R.layout.support_simple_spinner_dropdown_item,
-                MEAL_TYPES
+                WORKOUT_TYPES
         ));
-
         if (nonNull(item)) {
             acTime.setText(item.startTime);
-            acMealType.setText(item.title.substring(item.title.lastIndexOf('+') + 1));
+            acWorkoutType.setText(item.title.substring(item.title.lastIndexOf('+') + 1));
             if (item.everyDay)
                 rbRepeatEveryDay.setChecked(true);
             else if (item.everyWeek)
                 rbRepeatEveryWeek.setChecked(true);
         }
-
         return root;
     }
 }

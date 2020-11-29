@@ -22,6 +22,7 @@ import eu.vk.trackerapp.ui.ItemFragment;
 import eu.vk.trackerapp.ui.MealCreationFragment;
 import eu.vk.trackerapp.ui.SleepCreationFragment;
 import eu.vk.trackerapp.ui.UserFragment;
+import eu.vk.trackerapp.ui.WorkoutCreationFragment;
 import eu.vk.trackerapp.ui.model.Item;
 import eu.vk.trackerapp.ui.storage.DatabaseProvider;
 
@@ -46,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
 
         fabSleeping.setOnClickListener(v -> new SleepCreationFragment()
                 .show(getSupportFragmentManager(), "SleepCreation"));
+
+        fabTraining.setOnClickListener(v -> new WorkoutCreationFragment()
+                .show(getSupportFragmentManager(), "WorkoutCreation"));
 
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -95,6 +99,8 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
                         new MealCreationFragment(item).show(getSupportFragmentManager(), "MealEdit");
                     else if (item.title.contains("Miegas"))
                         new SleepCreationFragment(item).show(getSupportFragmentManager(), "SleepEdit");
+                    else if (item.title.contains("Treniruotė"))
+                        new WorkoutCreationFragment(item).show(getSupportFragmentManager(), "WorkoutEdit");
                 })
                 .setNegativeButton("Ištrinti", (dialog, which) -> {
                     DatabaseProvider.getInstance().itemDao().delete(item);

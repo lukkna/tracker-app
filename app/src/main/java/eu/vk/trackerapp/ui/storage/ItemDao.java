@@ -15,7 +15,7 @@ public interface ItemDao {
     @Insert
     void insertAll(Item... items);
 
-    @Query("SELECT * FROM item WHERE date = :date")
+    @Query("SELECT * FROM item WHERE date = :date ORDER BY startTime ASC")
     List<Item> queryByDate(String date);
 
     @Delete

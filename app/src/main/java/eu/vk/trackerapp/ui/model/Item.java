@@ -13,8 +13,10 @@ public class Item {
     public long uid;
     @ColumnInfo(name = "date")
     public String date;
-    @ColumnInfo(name = "time")
-    public String time;
+    @ColumnInfo(name = "startTime")
+    public String startTime;
+    @ColumnInfo(name = "endTime")
+    public String endTime;
     @ColumnInfo(name = "priority")
     public int priority;
     @ColumnInfo(name = "title")
@@ -28,20 +30,22 @@ public class Item {
     @Ignore
     public ZonedDateTime dateTime;
 
-    public Item(long uid, String date, String time, int priority, String title, boolean everyDay, boolean everyWeek, boolean completed) {
+    public Item(long uid, String date, String startTime, String endTime, int priority, String title, boolean everyDay, boolean everyWeek, boolean completed) {
         this.uid = uid;
-        this.dateTime = ZonedDateTime.parse(String.format("%sT%sZ", date, time));
+        this.dateTime = ZonedDateTime.parse(String.format("%sT%sZ", date, startTime));
         this.priority = priority;
         this.title = title;
         this.everyDay = everyDay;
         this.everyWeek = everyWeek;
         this.date = date;
-        this.time = time;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.completed = completed;
     }
 
     @Ignore
-    public Item(String date, String time, int priority, String title, boolean everyDay, boolean everyWeek, boolean completed) {
-        this(System.currentTimeMillis(), date, time, priority, title, everyDay, everyWeek, completed);
+    public Item(String date, String startTime, String endTime, int priority, String title, boolean everyDay, boolean everyWeek, boolean completed) {
+        this(System.currentTimeMillis(), date, startTime, endTime, priority, title, everyDay, everyWeek, completed);
     }
 
     @Ignore

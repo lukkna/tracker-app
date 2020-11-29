@@ -53,7 +53,7 @@ public class SleepCreationFragment extends DialogFragment {
         btSave.setOnClickListener(v -> {
             if (nonNull(this.item)) {
                 item.date = LocalDate.now().toString();
-                item.time = acTimeStart.getText().toString();
+                item.startTime = acTimeStart.getText().toString();
                 item.priority = 0;
                 item.title = "Miegas";
                 item.everyDay = true;
@@ -66,6 +66,7 @@ public class SleepCreationFragment extends DialogFragment {
                 item = new Item(
                         LocalDate.now().toString(),
                         acTimeStart.getText().toString(),
+                        acTimeEnd.getText().toString(),
                         0,
                         "Miegas",
                         true,
@@ -99,6 +100,13 @@ public class SleepCreationFragment extends DialogFragment {
                     (tp, sHour, sMinute) -> acTimeStart.setText(format("%02d:%02d", sHour, sMinute)), hour, minutes, true);
             picker.show();
         });
+
+        if (nonNull(item)) {
+            acTimeStart.setText(item.startTime);
+            acTimeEnd.setText(item.endTime);
+            if (item.completed)
+                rbCompleted.setChecked(true);
+        }
 
         return root;
     }
