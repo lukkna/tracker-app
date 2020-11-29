@@ -14,9 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.time.LocalDate;
 import java.util.List;
 
+import eu.vk.trackerapp.ListUpdateTracker;
 import eu.vk.trackerapp.R;
 import eu.vk.trackerapp.ui.model.Item;
 import eu.vk.trackerapp.ui.storage.DatabaseProvider;
+import io.reactivex.rxjava3.disposables.Disposable;
+
+import static java.util.Objects.nonNull;
 
 /**
  * A fragment representing a list of Items.
@@ -32,7 +36,7 @@ public class ItemFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private RecyclerView view;
-    private ItemListAdapter adapter;
+    private Disposable subscription;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -73,16 +77,16 @@ public class ItemFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            adapter = new ItemListAdapter(getItems(), mListener);
+            ItemListAdapter adapter = new ItemListAdapter(getItems(), mListener);
             recyclerView.setAdapter(adapter);
+            subscription = ListUpdateTracker.getInstance().getUpdateTracker()
+                    .subscribe(bool -> recyclerView.setAdapter(new ItemListAdapter(getItems(), mListener)));
         }
         return view;
     }
 
     @Override
     public void onResume() {
-        adapter = new ItemListAdapter(getItems(), mListener);
-        view.setAdapter(adapter);
         super.onResume();
     }
 
@@ -107,6 +111,8 @@ public class ItemFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        if (nonNull(subscription))
+            subscription.dispose();
     }
 
     /**

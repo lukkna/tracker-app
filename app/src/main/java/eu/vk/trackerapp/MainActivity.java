@@ -9,7 +9,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -19,11 +18,9 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.navigation.NavigationView;
 
-import java.time.LocalDate;
-
-import eu.vk.trackerapp.ui.CreationFragment;
 import eu.vk.trackerapp.ui.ItemFragment;
-import eu.vk.trackerapp.ui.ItemListAdapter;
+import eu.vk.trackerapp.ui.MealCreationFragment;
+import eu.vk.trackerapp.ui.SleepCreationFragment;
 import eu.vk.trackerapp.ui.UserFragment;
 import eu.vk.trackerapp.ui.model.Item;
 import eu.vk.trackerapp.ui.storage.DatabaseProvider;
@@ -44,8 +41,11 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         FloatingActionButton fabSleeping = findViewById(R.id.fab_create_sleeping);
         FloatingActionButton fabEating = findViewById(R.id.fab_create_eating);
 
-        fabEating.setOnClickListener(v -> new CreationFragment()
+        fabEating.setOnClickListener(v -> new MealCreationFragment()
                 .show(getSupportFragmentManager(), "MealCreation"));
+
+        fabSleeping.setOnClickListener(v -> new SleepCreationFragment()
+                .show(getSupportFragmentManager(), "SleepCreation"));
 
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -90,8 +90,18 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         new AlertDialog.Builder(this)
                 .setTitle("Ištrinti ar redaguoti")
                 .setMessage("Ištrinti įrašą ar redaguoti?")
-                .setPositiveButton("Redaguoti", (dialog, which) -> new CreationFragment(item).show(getSupportFragmentManager(), "MealEdit"))
-                .setNegativeButton("Ištrinti", (dialog, which) -> DatabaseProvider.getInstance().itemDao().delete(item))
+                .setPositiveButton("Redaguoti", (dialog, which) -> {
+                    if (item.title.contains("Valgis"))
+                        new MealCreationFragment(item).show(getSupportFragmentManager(), "MealEdit");
+                    else if (item.title.contains("Miegas"))
+                        new SleepCreationFragment(item).show(getSupportFragmentManager(), "SleepEdit");
+                })
+                .setNegativeButton("Ištrinti", (dialog, which) -> {
+                    DatabaseProvider.getInstance().itemDao().delete(item);
+                    ListUpdateTracker.getInstance()
+                            .getUpdateTracker()
+                            .onNext(true);
+                })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }

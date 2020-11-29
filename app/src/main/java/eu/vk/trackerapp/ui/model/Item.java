@@ -23,10 +23,12 @@ public class Item {
     public boolean everyDay;
     @ColumnInfo(name = "everyWeek")
     public boolean everyWeek;
+    @ColumnInfo(name = "completed")
+    public boolean completed;
     @Ignore
     public ZonedDateTime dateTime;
 
-    public Item(long uid, String date, String time, int priority, String title, boolean everyDay, boolean everyWeek) {
+    public Item(long uid, String date, String time, int priority, String title, boolean everyDay, boolean everyWeek, boolean completed) {
         this.uid = uid;
         this.dateTime = ZonedDateTime.parse(String.format("%sT%sZ", date, time));
         this.priority = priority;
@@ -38,18 +40,19 @@ public class Item {
     }
 
     @Ignore
-    public Item(String date, String time, int priority, String title, boolean everyDay, boolean everyWeek) {
-        this(System.currentTimeMillis(), date, time, priority, title, everyDay, everyWeek);
+    public Item(String date, String time, int priority, String title, boolean everyDay, boolean everyWeek, boolean completed) {
+        this(System.currentTimeMillis(), date, time, priority, title, everyDay, everyWeek, completed);
     }
 
     @Ignore
-    public Item(ZonedDateTime dateTime, int priority, String title, boolean everyDay, boolean everyWeek) {
+    public Item(ZonedDateTime dateTime, int priority, String title, boolean everyDay, boolean everyWeek, boolean completed) {
         this.uid = System.currentTimeMillis();
         this.dateTime = dateTime;
         this.priority = priority;
         this.title = title;
         this.everyDay = everyDay;
         this.everyWeek = everyWeek;
+        this.completed = completed;
     }
 
     @Ignore

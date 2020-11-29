@@ -6,10 +6,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,7 +18,7 @@ import com.google.android.material.button.MaterialButton;
 import java.time.LocalDate;
 import java.util.Calendar;
 
-import eu.vk.trackerapp.MainActivity;
+import eu.vk.trackerapp.ListUpdateTracker;
 import eu.vk.trackerapp.R;
 import eu.vk.trackerapp.ui.model.Item;
 import eu.vk.trackerapp.ui.storage.DatabaseProvider;
@@ -28,73 +26,80 @@ import eu.vk.trackerapp.ui.storage.DatabaseProvider;
 import static java.lang.String.format;
 import static java.util.Objects.nonNull;
 
-public class CreationFragment extends DialogFragment {
-    private static final String[] MEAL_TYPES = new String[]{"Paprastas", "Prieš sportą", "Po sporto"};
+public class SleepCreationFragment extends DialogFragment {
     private Item item;
     private TimePickerDialog picker;
-    private RadioButton rbRepeatEveryDay;
-    private RadioButton rbRepeatEveryWeek;
-    private RadioGroup rgRepeat;
+    private RadioButton rbCompleted;
     private MaterialButton btSave;
 
-    public CreationFragment(Item item) {
+    public SleepCreationFragment(Item item) {
         this.item = item;
     }
 
-    public CreationFragment() {
+    public SleepCreationFragment() {
     }
 
     @SuppressLint({"DefaultLocale", "ClickableViewAccessibility"})
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_creation, container, false);
-        AutoCompleteTextView acMealType = root.findViewById(R.id.actv_meal_type);
-        AutoCompleteTextView acTime = root.findViewById(R.id.actv_time);
-        rbRepeatEveryDay = root.findViewById(R.id.radio_button_1);
-        rbRepeatEveryWeek = root.findViewById(R.id.radio_button_2);
-        rgRepeat = root.findViewById(R.id.rg_repeat);
+        View root = inflater.inflate(R.layout.fragment_sleep_creation, container, false);
+        AutoCompleteTextView acTimeStart = root.findViewById(R.id.actv_time_start);
+        AutoCompleteTextView acTimeEnd = root.findViewById(R.id.actv_time_end);
+
+        rbCompleted = root.findViewById(R.id.radio_button_1);
+
         btSave = root.findViewById(R.id.bt_save);
         btSave.setOnClickListener(v -> {
             if (nonNull(this.item)) {
                 item.date = LocalDate.now().toString();
-                item.time = acTime.getText().toString();
+                item.time = acTimeStart.getText().toString();
                 item.priority = 0;
-                item.title = "Valgis+" + acMealType.getText().toString();
-                item.everyDay = rbRepeatEveryDay.isChecked();
-                item.everyWeek = rbRepeatEveryWeek.isChecked();
+                item.title = "Miegas";
+                item.everyDay = true;
+                item.everyWeek = false;
+                item.completed = rbCompleted.isChecked();
                 DatabaseProvider.getInstance()
                         .itemDao()
                         .update(item);
             } else {
                 item = new Item(
                         LocalDate.now().toString(),
-                        acTime.getText().toString(),
+                        acTimeStart.getText().toString(),
                         0,
-                        "Valgis+" + acMealType.getText().toString(),
-                        rbRepeatEveryDay.isChecked(),
-                        rbRepeatEveryWeek.isChecked()
+                        "Miegas",
+                        true,
+                        false,
+                        rbCompleted.isChecked()
                 );
                 DatabaseProvider.getInstance()
                         .itemDao()
                         .insertAll(item);
             }
             dismiss();
+            ListUpdateTracker.getInstance()
+                    .getUpdateTracker()
+                    .onNext(true);
         });
 
-        acTime.setOnClickListener(view -> {
+        acTimeStart.setOnClickListener(view -> {
             final Calendar calendar = Calendar.getInstance();
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
             int minutes = calendar.get(Calendar.MINUTE);
             picker = new TimePickerDialog(requireActivity(),
-                    (tp, sHour, sMinute) -> acTime.setText(format("%02d:%02d", sHour, sMinute)), hour, minutes, true);
+                    (tp, sHour, sMinute) -> acTimeStart.setText(format("%02d:%02d", sHour, sMinute)), hour, minutes, true);
             picker.show();
         });
-        acMealType.setAdapter(new ArrayAdapter<>(
-                requireActivity(),
-                R.layout.support_simple_spinner_dropdown_item,
-                MEAL_TYPES
-        ));
+
+        acTimeEnd.setOnClickListener(view -> {
+            final Calendar calendar = Calendar.getInstance();
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int minutes = calendar.get(Calendar.MINUTE);
+            picker = new TimePickerDialog(requireActivity(),
+                    (tp, sHour, sMinute) -> acTimeStart.setText(format("%02d:%02d", sHour, sMinute)), hour, minutes, true);
+            picker.show();
+        });
+
         return root;
     }
 }

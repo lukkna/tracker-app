@@ -16,7 +16,7 @@ import eu.vk.trackerapp.ui.ItemFragment.OnListFragmentInteractionListener;
 import eu.vk.trackerapp.ui.model.Item;
 
 public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHolder> {
-    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("hh:mm");
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
     private final List<Item> mValues;
     private final OnListFragmentInteractionListener mListener;
 

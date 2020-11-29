@@ -24,8 +24,4 @@ public interface ItemDao {
     @Update
     void update(Item... items);
 }
-//    @Insert
-//    void insertAll(User... users);
-//
-//    @Query("SELECT * FROM user LIMIT 1")
 
