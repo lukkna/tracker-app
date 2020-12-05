@@ -2,6 +2,7 @@ package eu.vk.trackerapp.ui.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
@@ -17,8 +18,13 @@ public class User {
     @ColumnInfo(name = "male")
     public boolean male;
 
+    @Ignore
     public User(String name, int age, double weight, boolean male) {
-        this.uid = System.currentTimeMillis();
+        this(System.currentTimeMillis(), name, age, weight, male);
+    }
+
+    public User(long uid, String name, int age, double weight, boolean male) {
+        this.uid = uid;
         this.name = name;
         this.age = age;
         this.weight = weight;

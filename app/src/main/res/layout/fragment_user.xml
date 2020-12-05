@@ -45,13 +45,13 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/it_weight"
+            android:id="@+id/ti_weight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Svoris"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ti_name">
+            app:layout_constraintTop_toBottomOf="@id/ti_age">
 
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_weight"
@@ -68,8 +68,8 @@
             android:orientation="horizontal"
             android:tooltipText="Lytis"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/it_weight">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ti_weight">
 
         <RadioButton
                 android:id="@+id/radio_button_1"

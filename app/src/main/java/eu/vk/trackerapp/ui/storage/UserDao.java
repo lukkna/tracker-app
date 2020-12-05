@@ -3,6 +3,7 @@ package eu.vk.trackerapp.ui.storage;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import eu.vk.trackerapp.ui.model.User;
 
@@ -13,4 +14,7 @@ public interface UserDao {
 
     @Query("SELECT * FROM user LIMIT 1")
     User retrieveUser();
+
+    @Update
+    void update(User... users);
 }

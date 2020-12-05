@@ -44,33 +44,46 @@ public class UserFragment extends DialogFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        btCreate.setOnClickListener(v -> {
-            if (isNull(etName.getText()) || isNull(etAge.getText()) || isNull(etWeight.getText()))
-                Snackbar.make(requireView(), "Būtina užpildyti visus laukus!", BaseTransientBottomBar.LENGTH_LONG);
-            else {
-                DatabaseProvider.getInstance()
-                        .userDao()
-                        .insertAll(
-                                new User(etName.getText().toString(),
-                                        Integer.valueOf(etAge.getText().toString()),
-                                        Double.valueOf(etWeight.getText().toString()),
-                                        rbMale.isSelected())
-                        );
-                dismiss();
-            }
-        });
-
         User user = DatabaseProvider.getInstance()
                 .userDao()
                 .retrieveUser();
+
+        btCreate.setOnClickListener(v -> {
+                    if (isNull(etName.getText()) || isNull(etAge.getText()) || isNull(etWeight.getText()))
+                        Snackbar.make(requireView(), "Būtina užpildyti visus laukus!", BaseTransientBottomBar.LENGTH_LONG);
+                    else if (isNull(user)) {
+                        User newUser = new User(etName.getText().toString(),
+                                Integer.valueOf(etAge.getText().toString()),
+                                Double.valueOf(etWeight.getText().toString()),
+                                rbMale.isChecked());
+                        DatabaseProvider.getInstance()
+                                .userDao()
+                                .insertAll(newUser);
+                        dismiss();
+                    } else {
+                        User updatedUser = new User(
+                                user.uid,
+                                etName.getText().toString(),
+                                Integer.valueOf(etAge.getText().toString()),
+                                Double.valueOf(etWeight.getText().toString()),
+                                rbMale.isChecked());
+                        DatabaseProvider.getInstance()
+                                .userDao()
+                                .update(updatedUser);
+                        dismiss();
+                    }
+                }
+        );
 
         if (nonNull(user)) {
             etName.setText(user.name);
             etAge.setText(String.valueOf(user.age));
             etWeight.setText(String.valueOf(user.weight));
 
-            if (!user.male)
-                rbFemale.toggle();
+            if (user.male)
+                rbMale.setChecked(true);
+            else
+                rbFemale.setChecked(true);
         }
 
         super.onViewCreated(view, savedInstanceState);
