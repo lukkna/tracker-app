@@ -25,13 +25,16 @@ public class Item {
     public boolean everyDay;
     @ColumnInfo(name = "everyWeek")
     public boolean everyWeek;
+    @ColumnInfo(name = "weekDay")
+    public int weekDay;
     @ColumnInfo(name = "completed")
     public boolean completed;
     @Ignore
     public ZonedDateTime dateTime;
 
-    public Item(long uid, String date, String startTime, String endTime, int priority, String title, boolean everyDay, boolean everyWeek, boolean completed) {
+    public Item(long uid, String date, String startTime, String endTime, int priority, String title, boolean everyDay, boolean everyWeek, int weekDay, boolean completed) {
         this.uid = uid;
+        this.weekDay = weekDay;
         this.dateTime = ZonedDateTime.parse(String.format("%sT%sZ", date, startTime));
         this.priority = priority;
         this.title = title;
@@ -44,12 +47,12 @@ public class Item {
     }
 
     @Ignore
-    public Item(String date, String startTime, String endTime, int priority, String title, boolean everyDay, boolean everyWeek, boolean completed) {
-        this(System.currentTimeMillis(), date, startTime, endTime, priority, title, everyDay, everyWeek, completed);
+    public Item(String date, String startTime, String endTime, int priority, String title, boolean everyDay, boolean everyWeek, int weekDay, boolean completed) {
+        this(System.currentTimeMillis(), date, startTime, endTime, priority, title, everyDay, everyWeek, weekDay, completed);
     }
 
     @Ignore
-    public Item(ZonedDateTime dateTime, int priority, String title, boolean everyDay, boolean everyWeek, boolean completed) {
+    public Item(ZonedDateTime dateTime, int priority, String title, boolean everyDay, boolean everyWeek, int weekDay, boolean completed) {
         this.uid = System.currentTimeMillis();
         this.dateTime = dateTime;
         this.priority = priority;
@@ -57,6 +60,7 @@ public class Item {
         this.everyDay = everyDay;
         this.everyWeek = everyWeek;
         this.completed = completed;
+        this.weekDay = weekDay;
     }
 
     @Ignore

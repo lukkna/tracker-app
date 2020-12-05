@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.format.DateTimeFormatter;
@@ -14,6 +13,8 @@ import java.util.List;
 import eu.vk.trackerapp.R;
 import eu.vk.trackerapp.ui.ItemFragment.OnListFragmentInteractionListener;
 import eu.vk.trackerapp.ui.model.Item;
+
+import static android.graphics.Typeface.DEFAULT_BOLD;
 
 public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHolder> {
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
@@ -34,35 +35,45 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.tvItemTime.setText(mValues.get(position).dateTime.format(TIME_FORMATTER));
-        holder.tvItemName.setText(mValues.get(position).title.replace("+", ": "));
+        if (position == 0) {
+            holder.tvItemTime.setText("Laikas");
+            holder.tvItemTime.setTypeface(DEFAULT_BOLD);
+            holder.tvItemName.setText("Įvykis");
+            holder.tvItemName.setTypeface(DEFAULT_BOLD);
+            holder.tvPriority.setText("Prioritetas");
+            holder.tvPriority.setTypeface(DEFAULT_BOLD);
+        } else {
+            holder.mItem = mValues.get(position - 1);
+            holder.tvItemTime.setText(holder.mItem.dateTime.format(TIME_FORMATTER));
+            holder.tvItemName.setText(holder.mItem.title.replace("+", ": "));
+            holder.tvPriority.setText(holder.mItem.priority == 0 ? "" : String.valueOf(holder.mItem.priority));
 
-        holder.mView.setOnClickListener(v -> {
-            if (null != mListener) {
-                // Notify the active callbacks interface (the activity, if the
-                // fragment is attached to one) that an item has been selected.
-                mListener.onListFragmentInteraction(holder.mItem);
-            }
-        });
+            holder.mView.setOnClickListener(v -> {
+                if (null != mListener) {
+                    mListener.onListFragmentInteraction(holder.mItem);
+                }
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return mValues.size() + 1;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView tvItemTime;
-        public final TextView tvItemName;
-        public Item mItem;
+        final View mView;
+        final TextView tvItemTime;
+        final TextView tvItemName;
+        final TextView tvPriority;
+        Item mItem;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             mView = view;
-            tvItemTime = (TextView) view.findViewById(R.id.tv_item_time);
-            tvItemName = (TextView) view.findViewById(R.id.tv_name);
+            tvItemTime = view.findViewById(R.id.tv_item_time);
+            tvItemName = view.findViewById(R.id.tv_name);
+            tvPriority = view.findViewById(R.id.tv_priority);
         }
 
         @Override

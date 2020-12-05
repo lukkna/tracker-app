@@ -6,6 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import eu.vk.trackerapp.ui.model.Item;
@@ -15,8 +16,8 @@ public interface ItemDao {
     @Insert
     void insertAll(Item... items);
 
-    @Query("SELECT * FROM item WHERE date = :date ORDER BY startTime ASC")
-    List<Item> queryByDate(String date);
+    @Query("SELECT * FROM item WHERE date = :date OR everyDay OR (everyWeek AND weekDay = :weekDay) ORDER BY startTime ASC")
+    List<Item> queryByDate(String date, int weekDay);
 
     @Delete
     void delete(Item... items);

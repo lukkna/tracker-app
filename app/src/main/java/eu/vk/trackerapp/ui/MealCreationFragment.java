@@ -25,6 +25,7 @@ import eu.vk.trackerapp.ui.model.Item;
 import eu.vk.trackerapp.ui.storage.DatabaseProvider;
 
 import static eu.vk.trackerapp.ui.CurrentDateHolder.CURRENT_DATE;
+import static eu.vk.trackerapp.ui.CurrentDateHolder.CURRENT_DATE_STRING;
 import static java.lang.String.format;
 import static java.util.Objects.nonNull;
 
@@ -58,24 +59,26 @@ public class MealCreationFragment extends DialogFragment {
 
         btSave.setOnClickListener(v -> {
             if (nonNull(this.item)) {
-                item.date = CURRENT_DATE;
+                item.date = CURRENT_DATE_STRING;
                 item.startTime = acTime.getText().toString();
                 item.priority = 0;
                 item.title = "Valgis+" + acMealType.getText().toString();
                 item.everyDay = rbRepeatEveryDay.isChecked();
                 item.everyWeek = rbRepeatEveryWeek.isChecked();
+                item.weekDay = CURRENT_DATE.getDayOfWeek().getValue();
                 DatabaseProvider.getInstance()
                         .itemDao()
                         .update(item);
             } else {
                 item = new Item(
-                        CURRENT_DATE,
+                        CURRENT_DATE_STRING,
                         acTime.getText().toString(),
                         null,
                         0,
                         "Valgis+" + acMealType.getText().toString(),
                         rbRepeatEveryDay.isChecked(),
                         rbRepeatEveryWeek.isChecked(),
+                        CURRENT_DATE.getDayOfWeek().getValue(),
                         false
                 );
                 DatabaseProvider.getInstance()

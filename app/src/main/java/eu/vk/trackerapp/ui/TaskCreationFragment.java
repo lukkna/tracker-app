@@ -25,6 +25,7 @@ import eu.vk.trackerapp.ui.model.Item;
 import eu.vk.trackerapp.ui.storage.DatabaseProvider;
 
 import static eu.vk.trackerapp.ui.CurrentDateHolder.CURRENT_DATE;
+import static eu.vk.trackerapp.ui.CurrentDateHolder.CURRENT_DATE_STRING;
 import static java.lang.String.format;
 import static java.util.Objects.nonNull;
 
@@ -57,24 +58,26 @@ public class TaskCreationFragment extends DialogFragment {
         btSave = root.findViewById(R.id.bt_save);
         btSave.setOnClickListener(v -> {
             if (nonNull(this.item)) {
-                item.date = CURRENT_DATE;
+                item.date = CURRENT_DATE_STRING;
                 item.startTime = acTime.getText().toString();
                 item.priority = Integer.parseInt(acPriority.getText().toString().split(" ")[0]);
                 item.title = "Užduotis+" + etTaskName.getText().toString();
                 item.everyDay = rbRepeatEveryDay.isChecked();
                 item.everyWeek = rbRepeatEveryWeek.isChecked();
+                item.weekDay = CURRENT_DATE.getDayOfWeek().getValue();
                 DatabaseProvider.getInstance()
                         .itemDao()
                         .update(item);
             } else {
                 item = new Item(
-                        CURRENT_DATE,
+                        CURRENT_DATE_STRING,
                         acTime.getText().toString(),
                         null,
                         Integer.parseInt(acPriority.getText().toString().split(" ")[0]),
                         "Užduotis+" + etTaskName.getText().toString(),
                         rbRepeatEveryDay.isChecked(),
                         rbRepeatEveryWeek.isChecked(),
+                        CURRENT_DATE.getDayOfWeek().getValue(),
                         false
                 );
                 DatabaseProvider.getInstance()

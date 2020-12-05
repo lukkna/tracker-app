@@ -24,6 +24,7 @@ import eu.vk.trackerapp.ui.storage.DatabaseProvider;
 import io.reactivex.rxjava3.disposables.Disposable;
 
 import static eu.vk.trackerapp.ui.CurrentDateHolder.CURRENT_DATE;
+import static eu.vk.trackerapp.ui.CurrentDateHolder.CURRENT_DATE_STRING;
 import static java.lang.String.format;
 import static java.util.Objects.nonNull;
 
@@ -92,8 +93,8 @@ public class ItemFragment extends Fragment {
         picker = new DatePickerDialog(
                 requireActivity(),
                 (v, year, month, dayOfMonth) -> {
-                    CURRENT_DATE = format("%s-%02d-%02d", year, month + 1, dayOfMonth);
-                    acDate.setText(CURRENT_DATE);
+                    CURRENT_DATE_STRING = format("%s-%02d-%02d", year, month + 1, dayOfMonth);
+                    acDate.setText(CURRENT_DATE_STRING);
                     currentYear = year;
                     currentMonth = month;
                     currentDay = dayOfMonth;
@@ -117,7 +118,7 @@ public class ItemFragment extends Fragment {
     private List<Item> getItems() {
         return DatabaseProvider.getInstance()
                 .itemDao()
-                .queryByDate(CURRENT_DATE);
+                .queryByDate(CURRENT_DATE_STRING, CURRENT_DATE.getDayOfWeek().getValue());
     }
 
     @Override

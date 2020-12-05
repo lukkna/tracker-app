@@ -23,6 +23,7 @@ import eu.vk.trackerapp.ui.model.Item;
 import eu.vk.trackerapp.ui.storage.DatabaseProvider;
 
 import static eu.vk.trackerapp.ui.CurrentDateHolder.CURRENT_DATE;
+import static eu.vk.trackerapp.ui.CurrentDateHolder.CURRENT_DATE_STRING;
 import static java.lang.String.format;
 import static java.util.Objects.nonNull;
 
@@ -52,25 +53,27 @@ public class SleepCreationFragment extends DialogFragment {
         btSave = root.findViewById(R.id.bt_save);
         btSave.setOnClickListener(v -> {
             if (nonNull(this.item)) {
-                item.date = CURRENT_DATE;
+                item.date = CURRENT_DATE_STRING;
                 item.startTime = acTimeStart.getText().toString();
                 item.priority = 0;
                 item.title = "Miegas";
                 item.everyDay = true;
                 item.everyWeek = false;
+                item.weekDay = CURRENT_DATE.getDayOfWeek().getValue();
                 item.completed = rbCompleted.isChecked();
                 DatabaseProvider.getInstance()
                         .itemDao()
                         .update(item);
             } else {
                 item = new Item(
-                        CURRENT_DATE,
+                        CURRENT_DATE_STRING,
                         acTimeStart.getText().toString(),
                         acTimeEnd.getText().toString(),
                         0,
                         "Miegas",
                         true,
                         false,
+                        CURRENT_DATE.getDayOfWeek().getValue(),
                         rbCompleted.isChecked()
                 );
                 DatabaseProvider.getInstance()
