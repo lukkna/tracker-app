@@ -21,6 +21,7 @@ import com.google.android.material.navigation.NavigationView;
 import eu.vk.trackerapp.ui.ItemFragment;
 import eu.vk.trackerapp.ui.MealCreationFragment;
 import eu.vk.trackerapp.ui.SleepCreationFragment;
+import eu.vk.trackerapp.ui.TaskCreationFragment;
 import eu.vk.trackerapp.ui.UserFragment;
 import eu.vk.trackerapp.ui.WorkoutCreationFragment;
 import eu.vk.trackerapp.ui.model.Item;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         FloatingActionButton fabTraining = findViewById(R.id.fab_create_training);
         FloatingActionButton fabSleeping = findViewById(R.id.fab_create_sleeping);
         FloatingActionButton fabEating = findViewById(R.id.fab_create_eating);
+        FloatingActionButton fabTask = findViewById(R.id.fab_create_task);
 
         fabEating.setOnClickListener(v -> new MealCreationFragment()
                 .show(getSupportFragmentManager(), "MealCreation"));
@@ -50,6 +52,9 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
 
         fabTraining.setOnClickListener(v -> new WorkoutCreationFragment()
                 .show(getSupportFragmentManager(), "WorkoutCreation"));
+
+        fabTask.setOnClickListener(v -> new TaskCreationFragment()
+                .show(getSupportFragmentManager(), "TaskCreation"));
 
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -101,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
                         new SleepCreationFragment(item).show(getSupportFragmentManager(), "SleepEdit");
                     else if (item.title.contains("Treniruotė"))
                         new WorkoutCreationFragment(item).show(getSupportFragmentManager(), "WorkoutEdit");
+                    else if (item.title.contains("Užduotis"))
+                        new TaskCreationFragment(item).show(getSupportFragmentManager(), "TaskEdit");
                 })
                 .setNegativeButton("Ištrinti", (dialog, which) -> {
                     DatabaseProvider.getInstance().itemDao().delete(item);

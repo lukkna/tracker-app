@@ -31,25 +31,32 @@
             app:srcCompat="@android:drawable/ic_input_add">
 
         <com.github.clans.fab.FloatingActionButton
-                app:fab_label="Pridėti treniruotę"
-                android:layout_width="wrap_content"
                 android:id="@+id/fab_create_training"
-                android:layout_height="wrap_content"
-                android:src="@drawable/fab_add" />
-
-        <com.github.clans.fab.FloatingActionButton
-                app:fab_label="Pridėti miegojimą"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/fab_create_sleeping"
-                android:src="@drawable/fab_add" />
+                android:src="@drawable/fab_add"
+                app:fab_label="Pridėti treniruotę" />
 
         <com.github.clans.fab.FloatingActionButton
-                app:fab_label="Pridėti valgį"
+                android:id="@+id/fab_create_sleeping"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/fab_add"
+                app:fab_label="Pridėti miegojimą" />
+
+        <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab_create_eating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/fab_add" />
+                android:src="@drawable/fab_add"
+                app:fab_label="Pridėti valgį" />
+
+        <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_create_task"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/fab_add"
+                app:fab_label="Pridėti užduotį" />
 
     </com.github.clans.fab.FloatingActionMenu>
 

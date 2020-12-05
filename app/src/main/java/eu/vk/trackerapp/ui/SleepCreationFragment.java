@@ -15,7 +15,6 @@ import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.button.MaterialButton;
 
-import java.time.LocalDate;
 import java.util.Calendar;
 
 import eu.vk.trackerapp.ListUpdateTracker;

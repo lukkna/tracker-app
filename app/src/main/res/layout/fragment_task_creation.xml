@@ -57,24 +57,20 @@
     </RadioGroup>
 
     <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_workout_type"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:id="@+id/ti_task_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tipas"
-            android:paddingTop="60dp"
-            android:focusableInTouchMode="false"
-            app:layout_constraintBottom_toTopOf="@id/til_priority"
+            android:hint="Užduotis"
+            android:paddingBottom="30dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rg_repeat">
 
-        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/actv_workout_type"
-                android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_task_name"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:focusableInTouchMode="false"
-                android:inputType="none" />
-
+                android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -82,9 +78,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Prioritetas"
-            android:paddingTop="30dp"
             android:focusableInTouchMode="false"
+            android:hint="Prioritetas"
+            app:layout_constraintTop_toBottomOf="@id/ti_task_name"
             app:layout_constraintBottom_toTopOf="@id/bt_save"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -107,5 +103,5 @@
             android:text="Saugoti"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/til_workout_type" />
+            app:layout_constraintTop_toBottomOf="@id/til_priority" />
 </androidx.constraintlayout.widget.ConstraintLayout>
