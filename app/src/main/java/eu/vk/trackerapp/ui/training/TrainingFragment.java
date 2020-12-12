@@ -1,4 +1,4 @@
-package eu.vk.trackerapp.ui.gallery;
+package eu.vk.trackerapp.ui.training;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import eu.vk.trackerapp.R;
 
-public class GalleryFragment extends Fragment {
+public class TrainingFragment extends Fragment {
 
-    private GalleryViewModel galleryViewModel;
+    private TrainingViewModel trainingViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        galleryViewModel =
-                ViewModelProviders.of(this).get(GalleryViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_gallery, container, false);
+        trainingViewModel =
+                ViewModelProviders.of(this).get(TrainingViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_training, container, false);
         final TextView textView = root.findViewById(R.id.text_gallery);
-        galleryViewModel.getText().observe(this, new Observer<String>() {
+        trainingViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

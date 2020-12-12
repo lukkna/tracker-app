@@ -1,4 +1,4 @@
-package eu.vk.trackerapp.ui.tools;
+package eu.vk.trackerapp.ui.help;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

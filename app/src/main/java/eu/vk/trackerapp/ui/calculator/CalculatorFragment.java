@@ -1,4 +1,4 @@
-package eu.vk.trackerapp.ui.send;
+package eu.vk.trackerapp.ui.calculator;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import eu.vk.trackerapp.R;
 
-public class SendFragment extends Fragment {
+public class CalculatorFragment extends Fragment {
 
-    private SendViewModel sendViewModel;
+    private CalculatorViewModel calculatorViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        sendViewModel =
-                ViewModelProviders.of(this).get(SendViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_send, container, false);
-        final TextView textView = root.findViewById(R.id.text_send);
-        sendViewModel.getText().observe(this, new Observer<String>() {
+        calculatorViewModel =
+                ViewModelProviders.of(this).get(CalculatorViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_calculator, container, false);
+        final TextView textView = root.findViewById(R.id.text_slideshow);
+        calculatorViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
