@@ -26,6 +26,7 @@ public class UserFragment extends DialogFragment {
     private TextInputEditText etName;
     private TextInputEditText etAge;
     private TextInputEditText etWeight;
+    private TextInputEditText etHeight;
     private MaterialButton btCreate;
     private RadioButton rbMale;
     private RadioButton rbFemale;
@@ -36,6 +37,7 @@ public class UserFragment extends DialogFragment {
         etName = root.findViewById(R.id.et_name);
         etAge = root.findViewById(R.id.et_age);
         etWeight = root.findViewById(R.id.et_weight);
+        etHeight = root.findViewById(R.id.et_height);
         btCreate = root.findViewById(R.id.bt_create);
         rbMale = root.findViewById(R.id.radio_button_1);
         rbFemale = root.findViewById(R.id.radio_button_2);
@@ -49,13 +51,14 @@ public class UserFragment extends DialogFragment {
                 .retrieveUser();
 
         btCreate.setOnClickListener(v -> {
-                    if (isNull(etName.getText()) || isNull(etAge.getText()) || isNull(etWeight.getText()))
+                    if (isNull(etName.getText()) || isNull(etAge.getText()) || isNull(etWeight.getText()) || isNull(etHeight.getText()))
                         Snackbar.make(requireView(), "Būtina užpildyti visus laukus!", BaseTransientBottomBar.LENGTH_LONG);
                     else if (isNull(user)) {
                         User newUser = new User(etName.getText().toString(),
                                 Integer.valueOf(etAge.getText().toString()),
                                 Double.valueOf(etWeight.getText().toString()),
-                                rbMale.isChecked());
+                                rbMale.isChecked(),
+                                Integer.valueOf(etHeight.getText().toString()));
                         DatabaseProvider.getInstance()
                                 .userDao()
                                 .insertAll(newUser);
@@ -66,7 +69,8 @@ public class UserFragment extends DialogFragment {
                                 etName.getText().toString(),
                                 Integer.valueOf(etAge.getText().toString()),
                                 Double.valueOf(etWeight.getText().toString()),
-                                rbMale.isChecked());
+                                rbMale.isChecked(),
+                                Integer.valueOf(etHeight.getText().toString()));
                         DatabaseProvider.getInstance()
                                 .userDao()
                                 .update(updatedUser);
@@ -79,6 +83,7 @@ public class UserFragment extends DialogFragment {
             etName.setText(user.name);
             etAge.setText(String.valueOf(user.age));
             etWeight.setText(String.valueOf(user.weight));
+            etHeight.setText(String.valueOf(user.height));
 
             if (user.male)
                 rbMale.setChecked(true);

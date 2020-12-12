@@ -60,6 +60,22 @@
                 android:inputType="numberDecimal" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ti_height"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ūgis (cm)"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ti_weight">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_height"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <RadioGroup
             android:id="@+id/rg_sex"
             android:layout_width="wrap_content"
@@ -69,7 +85,7 @@
             android:tooltipText="Lytis"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ti_weight">
+            app:layout_constraintTop_toBottomOf="@id/ti_height">
 
         <RadioButton
                 android:id="@+id/radio_button_1"

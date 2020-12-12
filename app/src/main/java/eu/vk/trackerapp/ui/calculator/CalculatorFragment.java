@@ -6,30 +6,38 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 import eu.vk.trackerapp.R;
+import eu.vk.trackerapp.ui.model.User;
+import eu.vk.trackerapp.ui.storage.DatabaseProvider;
+
+import static java.util.Objects.nonNull;
 
 public class CalculatorFragment extends Fragment {
 
-    private CalculatorViewModel calculatorViewModel;
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        calculatorViewModel =
-                ViewModelProviders.of(this).get(CalculatorViewModel.class);
         View root = inflater.inflate(R.layout.fragment_calculator, container, false);
-        final TextView textView = root.findViewById(R.id.text_slideshow);
-        calculatorViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+        TextView tvLose = root.findViewById(R.id.tv_lose);
+        TextView tvSustain = root.findViewById(R.id.tv_sustain);
+        TextView tvGain = root.findViewById(R.id.tv_gain);
+
+        User user = DatabaseProvider.getInstance()
+                .userDao()
+                .retrieveUser();
+
+        if (nonNull(user)) {
+            tvLose.setText(String.format("Numesti svorio: %s kcal", countCalories(user.weight - 0.5, user.height, user.age)));
+            tvSustain.setText(String.format("Palaikyti svorį: %s kcal", countCalories(user.weight, user.height, user.age)));
+            tvGain.setText(String.format("Priaugti svorio: %s kcal", countCalories(user.weight + 0.5, user.height, user.age)));
+        }
+
         return root;
+    }
+
+    private long countCalories(double weight, int height, int age) {
+        return Math.round(((10 * weight) + (6.25 * height) - (5 * age)) * 1.25);
     }
 }
