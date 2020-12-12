@@ -4,6 +4,6 @@
     <item
             android:id="@+id/action_settings"
             android:orderInCategory="100"
-            android:title="Redaguoti vartotoją"
+            android:title="Redaguoti naudotoją"
             app:showAsAction="never" />
 </menu>

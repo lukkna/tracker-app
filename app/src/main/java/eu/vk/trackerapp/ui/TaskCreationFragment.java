@@ -32,7 +32,6 @@ import static java.util.Objects.nonNull;
 public class TaskCreationFragment extends DialogFragment {
     private static final String[] PRIORITIES = new String[]{"1 - Aukščiausias", "2", "3", "4", "5 - Žemiausias"};
     private Item item;
-    private TimePickerDialog picker;
     private RadioButton rbRepeatEveryDay;
     private RadioButton rbRepeatEveryWeek;
     private MaterialButton btSave;
@@ -51,7 +50,8 @@ public class TaskCreationFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_task_creation, container, false);
         AutoCompleteTextView acPriority = root.findViewById(R.id.actv_priority);
-        AutoCompleteTextView acTime = root.findViewById(R.id.actv_time);
+        AutoCompleteTextView acTimeFrom = root.findViewById(R.id.actv_time_from);
+        AutoCompleteTextView acTimeTo = root.findViewById(R.id.actv_time_to);
         rbRepeatEveryDay = root.findViewById(R.id.radio_button_1);
         rbRepeatEveryWeek = root.findViewById(R.id.radio_button_2);
         etTaskName = root.findViewById(R.id.et_task_name);
@@ -59,7 +59,8 @@ public class TaskCreationFragment extends DialogFragment {
         btSave.setOnClickListener(v -> {
             if (nonNull(this.item)) {
                 item.date = CURRENT_DATE_STRING;
-                item.startTime = acTime.getText().toString();
+                item.startTime = acTimeFrom.getText().toString();
+                item.endTime = acTimeTo.getText().toString();
                 item.priority = Integer.parseInt(acPriority.getText().toString().split(" ")[0]);
                 item.title = "Užduotis+" + etTaskName.getText().toString();
                 item.everyDay = rbRepeatEveryDay.isChecked();
@@ -71,8 +72,8 @@ public class TaskCreationFragment extends DialogFragment {
             } else {
                 item = new Item(
                         CURRENT_DATE_STRING,
-                        acTime.getText().toString(),
-                        null,
+                        acTimeFrom.getText().toString(),
+                        acTimeTo.getText().toString(),
                         Integer.parseInt(acPriority.getText().toString().split(" ")[0]),
                         "Užduotis+" + etTaskName.getText().toString(),
                         rbRepeatEveryDay.isChecked(),
@@ -90,12 +91,20 @@ public class TaskCreationFragment extends DialogFragment {
                     .onNext(true);
         });
 
-        acTime.setOnClickListener(view -> {
+        acTimeFrom.setOnClickListener(view -> {
             final Calendar calendar = Calendar.getInstance();
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
             int minutes = calendar.get(Calendar.MINUTE);
-            picker = new TimePickerDialog(requireActivity(),
-                    (tp, sHour, sMinute) -> acTime.setText(format("%02d:%02d", sHour, sMinute)), hour, minutes, true);
+            TimePickerDialog picker = new TimePickerDialog(requireActivity(),
+                    (tp, sHour, sMinute) -> acTimeFrom.setText(format("%02d:%02d", sHour, sMinute)), hour, minutes, true);
+            picker.show();
+        });
+        acTimeTo.setOnClickListener(view -> {
+            final Calendar calendar = Calendar.getInstance();
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int minutes = calendar.get(Calendar.MINUTE);
+            TimePickerDialog picker = new TimePickerDialog(requireActivity(),
+                    (tp, sHour, sMinute) -> acTimeTo.setText(format("%02d:%02d", sHour, sMinute)), hour, minutes, true);
             picker.show();
         });
 
@@ -106,7 +115,8 @@ public class TaskCreationFragment extends DialogFragment {
         );
         acPriority.setAdapter(prioritiesAdapter);
         if (nonNull(item)) {
-            acTime.setText(item.startTime);
+            acTimeFrom.setText(item.startTime);
+            acTimeTo.setText(item.endTime);
             etTaskName.setText(item.title.replace("+", "~~~").split("~~~")[1]);
             if (item.priority != 0)
                 acPriority.setText(prioritiesAdapter.getItem(item.priority - 1), false);

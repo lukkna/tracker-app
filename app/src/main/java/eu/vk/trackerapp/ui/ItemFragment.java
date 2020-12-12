@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import eu.vk.trackerapp.ListUpdateTracker;
@@ -80,6 +82,7 @@ public class ItemFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_item_list, container, false);
         view = root.findViewById(R.id.list);
         AutoCompleteTextView acDate = root.findViewById(R.id.actv_date);
+        acDate.setText(LocalDate.now().toString());
         Context context = view.getContext();
         if (mColumnCount <= 1) {
             view.setLayoutManager(new LinearLayoutManager(context));
@@ -94,6 +97,7 @@ public class ItemFragment extends Fragment {
                 requireActivity(),
                 (v, year, month, dayOfMonth) -> {
                     CURRENT_DATE_STRING = format("%s-%02d-%02d", year, month + 1, dayOfMonth);
+                    CURRENT_DATE = LocalDate.parse(CURRENT_DATE_STRING);
                     acDate.setText(CURRENT_DATE_STRING);
                     currentYear = year;
                     currentMonth = month;

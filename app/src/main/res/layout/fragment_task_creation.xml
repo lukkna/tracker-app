@@ -10,18 +10,18 @@
         android:paddingTop="10dp">
 
     <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_time"
+            android:id="@+id/til_time_from"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:focusableInTouchMode="false"
-            android:hint="Laikas"
-            app:layout_constraintEnd_toStartOf="@+id/rg_repeat"
+            android:hint="Nuo"
+            app:layout_constraintEnd_toStartOf="@+id/til_time_to"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/actv_time"
+                android:id="@+id/actv_time_from"
                 style="?attr/spinnerDropDownItemStyle"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/dropdownListPreferredItemHeight"
@@ -29,6 +29,29 @@
                 android:inputType="none"
                 android:singleLine="true"
                 android:text="08:00" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_time_to"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="false"
+            android:hint="Iki"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/til_time_from"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/actv_time_to"
+                style="?attr/spinnerDropDownItemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/dropdownListPreferredItemHeight"
+                android:focusableInTouchMode="false"
+                android:inputType="none"
+                android:singleLine="true"
+                android:text="09:00" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -40,8 +63,8 @@
             android:orientation="horizontal"
             android:tooltipText="Kartoti"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/til_time"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/til_time_from">
 
         <RadioButton
                 android:id="@+id/radio_button_1"
@@ -80,10 +103,10 @@
             android:layout_height="wrap_content"
             android:focusableInTouchMode="false"
             android:hint="Prioritetas"
-            app:layout_constraintTop_toBottomOf="@id/ti_task_name"
             app:layout_constraintBottom_toTopOf="@id/bt_save"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ti_task_name">
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/actv_priority"

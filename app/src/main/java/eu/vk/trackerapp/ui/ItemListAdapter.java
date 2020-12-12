@@ -36,15 +36,17 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHo
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         if (position == 0) {
-            holder.tvItemTime.setText("Laikas");
-            holder.tvItemTime.setTypeface(DEFAULT_BOLD);
-            holder.tvItemName.setText("Įvykis");
+            holder.tvItemTimeFrom.setVisibility(View.GONE);
+            holder.tvItemTimeTo.setVisibility(View.GONE);
+            holder.tvDash.setVisibility(View.GONE);
+            holder.tvItemName.setText("Įrašas");
             holder.tvItemName.setTypeface(DEFAULT_BOLD);
             holder.tvPriority.setText("Prioritetas");
             holder.tvPriority.setTypeface(DEFAULT_BOLD);
         } else {
             holder.mItem = mValues.get(position - 1);
-            holder.tvItemTime.setText(holder.mItem.dateTime.format(TIME_FORMATTER));
+            holder.tvItemTimeFrom.setText(holder.mItem.startDateTime.format(TIME_FORMATTER));
+            holder.tvItemTimeTo.setText(holder.mItem.endDateTime.format(TIME_FORMATTER));
             holder.tvItemName.setText(holder.mItem.title.replace("+", ": "));
             holder.tvPriority.setText(holder.mItem.priority == 0 ? "" : String.valueOf(holder.mItem.priority));
 
@@ -63,17 +65,21 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         final View mView;
-        final TextView tvItemTime;
+        final TextView tvItemTimeFrom;
+        final TextView tvItemTimeTo;
         final TextView tvItemName;
         final TextView tvPriority;
+        final TextView tvDash;
         Item mItem;
 
         ViewHolder(View view) {
             super(view);
             mView = view;
-            tvItemTime = view.findViewById(R.id.tv_item_time);
+            tvItemTimeFrom = view.findViewById(R.id.tv_item_time_from);
+            tvItemTimeTo = view.findViewById(R.id.tv_item_time_to);
             tvItemName = view.findViewById(R.id.tv_name);
             tvPriority = view.findViewById(R.id.tv_priority);
+            tvDash = view.findViewById(R.id.tv_dash);
         }
 
         @Override

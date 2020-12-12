@@ -32,7 +32,6 @@ import static java.util.Objects.nonNull;
 public class MealCreationFragment extends DialogFragment {
     private static final String[] MEAL_TYPES = new String[]{"Paprastas", "Prieš sportą", "Po sporto"};
     private Item item;
-    private TimePickerDialog picker;
     private RadioButton rbRepeatEveryDay;
     private RadioButton rbRepeatEveryWeek;
     private RadioGroup rgRepeat;
@@ -51,7 +50,8 @@ public class MealCreationFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_meal_creation, container, false);
         AutoCompleteTextView acMealType = root.findViewById(R.id.actv_meal_type);
-        AutoCompleteTextView acTime = root.findViewById(R.id.actv_time);
+        AutoCompleteTextView acTimeFrom = root.findViewById(R.id.actv_time_from);
+        AutoCompleteTextView acTimeTo = root.findViewById(R.id.actv_time_to);
         rbRepeatEveryDay = root.findViewById(R.id.radio_button_1);
         rbRepeatEveryWeek = root.findViewById(R.id.radio_button_2);
         rgRepeat = root.findViewById(R.id.rg_repeat);
@@ -60,7 +60,8 @@ public class MealCreationFragment extends DialogFragment {
         btSave.setOnClickListener(v -> {
             if (nonNull(this.item)) {
                 item.date = CURRENT_DATE_STRING;
-                item.startTime = acTime.getText().toString();
+                item.startTime = acTimeFrom.getText().toString();
+                item.endTime = acTimeTo.getText().toString();
                 item.priority = 0;
                 item.title = "Valgis+" + acMealType.getText().toString();
                 item.everyDay = rbRepeatEveryDay.isChecked();
@@ -72,8 +73,8 @@ public class MealCreationFragment extends DialogFragment {
             } else {
                 item = new Item(
                         CURRENT_DATE_STRING,
-                        acTime.getText().toString(),
-                        null,
+                        acTimeFrom.getText().toString(),
+                        acTimeTo.getText().toString(),
                         0,
                         "Valgis+" + acMealType.getText().toString(),
                         rbRepeatEveryDay.isChecked(),
@@ -91,12 +92,20 @@ public class MealCreationFragment extends DialogFragment {
                     .onNext(true);
         });
 
-        acTime.setOnClickListener(view -> {
+        acTimeFrom.setOnClickListener(view -> {
             final Calendar calendar = Calendar.getInstance();
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
             int minutes = calendar.get(Calendar.MINUTE);
-            picker = new TimePickerDialog(requireActivity(),
-                    (tp, sHour, sMinute) -> acTime.setText(format("%02d:%02d", sHour, sMinute)), hour, minutes, true);
+            TimePickerDialog picker = new TimePickerDialog(requireActivity(),
+                    (tp, sHour, sMinute) -> acTimeFrom.setText(format("%02d:%02d", sHour, sMinute)), hour, minutes, true);
+            picker.show();
+        });
+        acTimeTo.setOnClickListener(view -> {
+            final Calendar calendar = Calendar.getInstance();
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int minutes = calendar.get(Calendar.MINUTE);
+            TimePickerDialog picker = new TimePickerDialog(requireActivity(),
+                    (tp, sHour, sMinute) -> acTimeTo.setText(format("%02d:%02d", sHour, sMinute)), hour, minutes, true);
             picker.show();
         });
         acMealType.setAdapter(new ArrayAdapter<>(
@@ -106,7 +115,8 @@ public class MealCreationFragment extends DialogFragment {
         ));
 
         if (nonNull(item)) {
-            acTime.setText(item.startTime);
+            acTimeFrom.setText(item.startTime);
+            acTimeTo.setText(item.endTime);
             acMealType.setText(item.title.substring(item.title.lastIndexOf('+') + 1), false);
             if (item.everyDay)
                 rbRepeatEveryDay.setChecked(true);
