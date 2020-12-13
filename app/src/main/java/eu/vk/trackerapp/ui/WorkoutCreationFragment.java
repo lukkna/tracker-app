@@ -18,6 +18,7 @@ import androidx.fragment.app.DialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -56,7 +57,7 @@ public class WorkoutCreationFragment extends DialogFragment {
         MaterialButton btSave = root.findViewById(R.id.bt_save);
         ListView lvExercises = root.findViewById(R.id.lv_exercises);
         MaterialButton mbAddExercise = root.findViewById(R.id.bt_add);
-
+        acDate.setText(LocalDate.now().toString());
         btSave.setOnClickListener(v -> {
             if (nonNull(this.workout)) {
                 workout.date = acDate.getText().toString();

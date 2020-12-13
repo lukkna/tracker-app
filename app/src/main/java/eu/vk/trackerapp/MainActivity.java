@@ -122,9 +122,9 @@ public class MainActivity extends AppCompatActivity implements OnItemInteraction
     @Override
     public void apply(Workout workout) {
         new AlertDialog.Builder(this)
-                .setTitle("Ištrinti ar redaguoti")
-                .setMessage("Ištrinti įrašą ar redaguoti?")
-                .setPositiveButton("Redaguoti", (dialog, which) -> new WorkoutCreationFragment(workout).show(getSupportFragmentManager(), "WorkoutEdit"))
+                .setTitle("Ištrinti, redaguoti ar peržiūrėti")
+                .setMessage("Ištrinti, peržiūrėti ar redaguoti įrašą?")
+                .setPositiveButton("Peržiūrėti", (dialog, which) -> new WorkoutCreationFragment(workout).show(getSupportFragmentManager(), "WorkoutEdit"))
                 .setNegativeButton("Ištrinti", (dialog, which) -> {
                     DatabaseProvider.getInstance().workoutDao().delete(workout);
                     ListUpdateTracker.getInstance()
