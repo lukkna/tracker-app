@@ -29,9 +29,9 @@ public class CalculatorFragment extends Fragment {
                 .retrieveUser();
 
         if (nonNull(user)) {
-            tvLose.setText(String.format("Numesti svorio: %s kcal", countCalories(user.weight - 0.5, user.height, user.age)));
+            tvLose.setText(String.format("Numesti svorio: %s kcal", countCalories(user.weight, user.height, user.age) - 500));
             tvSustain.setText(String.format("Palaikyti svorį: %s kcal", countCalories(user.weight, user.height, user.age)));
-            tvGain.setText(String.format("Priaugti svorio: %s kcal", countCalories(user.weight + 0.5, user.height, user.age)));
+            tvGain.setText(String.format("Priaugti svorio: %s kcal", countCalories(user.weight, user.height, user.age) + 500));
         }
 
         return root;

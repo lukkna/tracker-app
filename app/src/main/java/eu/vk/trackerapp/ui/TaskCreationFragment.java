@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -54,6 +55,26 @@ public class TaskCreationFragment extends DialogFragment {
         AutoCompleteTextView acTimeTo = root.findViewById(R.id.actv_time_to);
         rbRepeatEveryDay = root.findViewById(R.id.radio_button_1);
         rbRepeatEveryWeek = root.findViewById(R.id.radio_button_2);
+        RadioGroup rbGroup = root.findViewById(R.id.rg_repeat);
+        rbRepeatEveryDay.setOnClickListener(v -> {
+            if (rbRepeatEveryDay.isSelected()) {
+                rbRepeatEveryDay.setSelected(false);
+                rbGroup.clearCheck();
+                rbGroup.clearChildFocus(rbRepeatEveryDay);
+            } else {
+                rbRepeatEveryDay.setSelected(true);
+            }
+        });
+
+        rbRepeatEveryWeek.setOnClickListener(v -> {
+            if (rbRepeatEveryWeek.isSelected()) {
+                rbRepeatEveryWeek.setSelected(false);
+                rbGroup.clearCheck();
+                rbGroup.clearChildFocus(rbRepeatEveryWeek);
+            } else {
+                rbRepeatEveryWeek.setSelected(true);
+            }
+        });
         etTaskName = root.findViewById(R.id.et_task_name);
         btSave = root.findViewById(R.id.bt_save);
         btSave.setOnClickListener(v -> {

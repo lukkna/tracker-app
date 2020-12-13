@@ -114,6 +114,26 @@ public class MealCreationFragment extends DialogFragment {
                 MEAL_TYPES
         ));
 
+        rbRepeatEveryDay.setOnClickListener(v -> {
+            if (rbRepeatEveryDay.isSelected()) {
+                rbRepeatEveryDay.setSelected(false);
+                rgRepeat.clearCheck();
+                rgRepeat.clearChildFocus(rbRepeatEveryDay);
+            } else {
+                rbRepeatEveryDay.setSelected(true);
+            }
+        });
+
+        rbRepeatEveryWeek.setOnClickListener(v -> {
+            if (rbRepeatEveryWeek.isSelected()) {
+                rbRepeatEveryWeek.setSelected(false);
+                rgRepeat.clearCheck();
+                rgRepeat.clearChildFocus(rbRepeatEveryWeek);
+            } else {
+                rbRepeatEveryWeek.setSelected(true);
+            }
+        });
+
         if (nonNull(item)) {
             acTimeFrom.setText(item.startTime);
             acTimeTo.setText(item.endTime);
