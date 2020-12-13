@@ -1,43 +1,46 @@
 package eu.vk.trackerapp.ui;
 
 import android.annotation.SuppressLint;
-import android.app.TimePickerDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.RadioButton;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 
 import eu.vk.trackerapp.ListUpdateTracker;
 import eu.vk.trackerapp.R;
-import eu.vk.trackerapp.ui.model.Item;
+import eu.vk.trackerapp.ui.model.Exercise;
+import eu.vk.trackerapp.ui.model.Workout;
 import eu.vk.trackerapp.ui.storage.DatabaseProvider;
 
-import static eu.vk.trackerapp.ui.CurrentDateHolder.CURRENT_DATE;
-import static eu.vk.trackerapp.ui.CurrentDateHolder.CURRENT_DATE_STRING;
 import static java.lang.String.format;
 import static java.util.Objects.nonNull;
 
 public class WorkoutCreationFragment extends DialogFragment {
-    private static final String[] WORKOUT_TYPES = new String[]{"Krūtinė", "Rankos", "Kojos", "Nugara", "Kardio"};
-    private static final String[] PRIORITIES = new String[]{"1 - Aukščiausias", "2", "3", "4", "5 - Žemiausias"};
-    private Item item;
-    private RadioButton rbRepeatEveryDay;
-    private RadioButton rbRepeatEveryWeek;
-    private MaterialButton btSave;
+    private Workout workout;
+    private int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+    private int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
+    private int currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+    private ArrayAdapter<Exercise> adapter;
+    private List<Exercise> exercises = new LinkedList<>();
 
-    public WorkoutCreationFragment(Item item) {
-        this.item = item;
+    public WorkoutCreationFragment(Workout workout) {
+        this.workout = workout;
     }
 
     public WorkoutCreationFragment() {
@@ -48,41 +51,29 @@ public class WorkoutCreationFragment extends DialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_workout_creation, container, false);
-        AutoCompleteTextView acWorkoutType = root.findViewById(R.id.actv_workout_type);
-        AutoCompleteTextView acPriority = root.findViewById(R.id.actv_priority);
-        AutoCompleteTextView acTimeFrom = root.findViewById(R.id.actv_time_from);
-        AutoCompleteTextView acTimeTo = root.findViewById(R.id.actv_time_to);
-        rbRepeatEveryDay = root.findViewById(R.id.radio_button_1);
-        rbRepeatEveryWeek = root.findViewById(R.id.radio_button_2);
-        btSave = root.findViewById(R.id.bt_save);
+        TextInputEditText acWorkoutName = root.findViewById(R.id.actv_workout_name);
+        AutoCompleteTextView acDate = root.findViewById(R.id.actv_date);
+        MaterialButton btSave = root.findViewById(R.id.bt_save);
+        ListView lvExercises = root.findViewById(R.id.lv_exercises);
+        MaterialButton mbAddExercise = root.findViewById(R.id.bt_add);
+
         btSave.setOnClickListener(v -> {
-            if (nonNull(this.item)) {
-                item.date = CURRENT_DATE_STRING;
-                item.startTime = acTimeFrom.getText().toString();
-                item.endTime = acTimeTo.getText().toString();
-                item.priority = Integer.parseInt(acPriority.getText().toString().split(" ")[0]);
-                item.title = "Treniruotė+" + acWorkoutType.getText().toString();
-                item.everyDay = rbRepeatEveryDay.isChecked();
-                item.everyWeek = rbRepeatEveryWeek.isChecked();
-                item.weekDay = CURRENT_DATE.getDayOfWeek().getValue();
+            if (nonNull(this.workout)) {
+                workout.date = acDate.getText().toString();
+                workout.name = acWorkoutName.getText().toString();
+                workout.setExercises(exercises);
                 DatabaseProvider.getInstance()
-                        .itemDao()
-                        .update(item);
+                        .workoutDao()
+                        .update(workout);
             } else {
-                item = new Item(
-                        CURRENT_DATE_STRING,
-                        acTimeFrom.getText().toString(),
-                        acTimeTo.getText().toString(),
-                        Integer.parseInt(acPriority.getText().toString().split(" ")[0]),
-                        "Treniruotė+" + acWorkoutType.getText().toString(),
-                        rbRepeatEveryDay.isChecked(),
-                        rbRepeatEveryWeek.isChecked(),
-                        CURRENT_DATE.getDayOfWeek().getValue(),
-                        false
+                workout = new Workout(
+                        acDate.getText().toString(),
+                        acWorkoutName.getText().toString(),
+                        exercises
                 );
                 DatabaseProvider.getInstance()
-                        .itemDao()
-                        .insertAll(item);
+                        .workoutDao()
+                        .insertAll(workout);
             }
             dismiss();
             ListUpdateTracker.getInstance()
@@ -90,47 +81,45 @@ public class WorkoutCreationFragment extends DialogFragment {
                     .onNext(true);
         });
 
-        acTimeFrom.setOnClickListener(view -> {
-            final Calendar calendar = Calendar.getInstance();
-            int hour = calendar.get(Calendar.HOUR_OF_DAY);
-            int minutes = calendar.get(Calendar.MINUTE);
-            TimePickerDialog picker = new TimePickerDialog(requireActivity(),
-                    (tp, sHour, sMinute) -> acTimeFrom.setText(format("%02d:%02d", sHour, sMinute)), hour, minutes, true);
+        acDate.setOnClickListener(view -> {
+            DatePickerDialog picker = new DatePickerDialog(
+                    requireActivity(),
+                    (v, year, month, dayOfMonth) -> acDate.setText(format("%s-%02d-%02d", year, month + 1, dayOfMonth)),
+                    currentYear,
+                    currentMonth,
+                    currentDay);
             picker.show();
         });
 
-        acTimeTo.setOnClickListener(view -> {
-            final Calendar calendar = Calendar.getInstance();
-            int hour = calendar.get(Calendar.HOUR_OF_DAY);
-            int minutes = calendar.get(Calendar.MINUTE);
-            TimePickerDialog picker = new TimePickerDialog(requireActivity(),
-                    (tp, sHour, sMinute) -> acTimeTo.setText(format("%02d:%02d", sHour, sMinute)), hour, minutes, true);
-            picker.show();
-        });
-        ArrayAdapter<String> workoutTypeAdapter = new ArrayAdapter<>(
-                requireActivity(),
-                R.layout.support_simple_spinner_dropdown_item,
-                WORKOUT_TYPES
-        );
-        acWorkoutType.setAdapter(workoutTypeAdapter);
-
-        ArrayAdapter<String> prioritiesAdapter = new ArrayAdapter<>(
-                requireActivity(),
-                R.layout.support_simple_spinner_dropdown_item,
-                PRIORITIES
-        );
-        acPriority.setAdapter(prioritiesAdapter);
-        if (nonNull(item)) {
-            acTimeFrom.setText(item.startTime);
-            acTimeTo.setText(item.endTime);
-            acWorkoutType.setText(item.title.substring(item.title.lastIndexOf('+') + 1), false);
-            if (item.priority != 0)
-                acPriority.setText(prioritiesAdapter.getItem(item.priority - 1), false);
-            if (item.everyDay)
-                rbRepeatEveryDay.setChecked(true);
-            else if (item.everyWeek)
-                rbRepeatEveryWeek.setChecked(true);
+        if (nonNull(workout)) {
+            acDate.setText(workout.date);
+            acWorkoutName.setText(workout.name);
+            exercises = workout.getExercises();
         }
+
+        adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_list_item_1, exercises);
+        lvExercises.setAdapter(adapter);
+        lvExercises.setOnItemClickListener((parent, view, position, id) -> {
+            exercises.remove(position);
+            adapter.notifyDataSetChanged();
+        });
+        mbAddExercise.setOnClickListener(v -> {
+            new ExerciseFragment(exercise -> {
+                exercises.add(exercise);
+                adapter.notifyDataSetChanged();
+            }).show(getParentFragmentManager(), "AddExercise");
+        });
         return root;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Dialog dialog = getDialog();
+        if (dialog != null) {
+            int width = ViewGroup.LayoutParams.MATCH_PARENT;
+            int height = ViewGroup.LayoutParams.MATCH_PARENT;
+            dialog.getWindow().setLayout(width, height);
+        }
     }
 }

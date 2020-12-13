@@ -18,16 +18,18 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.navigation.NavigationView;
 
-import eu.vk.trackerapp.ui.ItemFragment;
+import eu.vk.trackerapp.ui.ItemFragment.OnItemInteractionListener;
 import eu.vk.trackerapp.ui.MealCreationFragment;
 import eu.vk.trackerapp.ui.SleepCreationFragment;
 import eu.vk.trackerapp.ui.TaskCreationFragment;
+import eu.vk.trackerapp.ui.TrainingFragment.OnWorkoutInteractionListener;
 import eu.vk.trackerapp.ui.UserFragment;
 import eu.vk.trackerapp.ui.WorkoutCreationFragment;
 import eu.vk.trackerapp.ui.model.Item;
+import eu.vk.trackerapp.ui.model.Workout;
 import eu.vk.trackerapp.ui.storage.DatabaseProvider;
 
-public class MainActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements OnItemInteractionListener, OnWorkoutInteractionListener {
     private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
 
@@ -95,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
     }
 
     @Override
-    public void onListFragmentInteraction(Item item) {
+    public void apply(Item item) {
         new AlertDialog.Builder(this)
                 .setTitle("Ištrinti ar redaguoti")
                 .setMessage("Ištrinti įrašą ar redaguoti?")
@@ -104,13 +106,27 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
                         new MealCreationFragment(item).show(getSupportFragmentManager(), "MealEdit");
                     else if (item.title.contains("Miegas"))
                         new SleepCreationFragment(item).show(getSupportFragmentManager(), "SleepEdit");
-                    else if (item.title.contains("Treniruotė"))
-                        new WorkoutCreationFragment(item).show(getSupportFragmentManager(), "WorkoutEdit");
                     else if (item.title.contains("Užduotis"))
                         new TaskCreationFragment(item).show(getSupportFragmentManager(), "TaskEdit");
                 })
                 .setNegativeButton("Ištrinti", (dialog, which) -> {
                     DatabaseProvider.getInstance().itemDao().delete(item);
+                    ListUpdateTracker.getInstance()
+                            .getUpdateTracker()
+                            .onNext(true);
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    @Override
+    public void apply(Workout workout) {
+        new AlertDialog.Builder(this)
+                .setTitle("Ištrinti ar redaguoti")
+                .setMessage("Ištrinti įrašą ar redaguoti?")
+                .setPositiveButton("Redaguoti", (dialog, which) -> new WorkoutCreationFragment(workout).show(getSupportFragmentManager(), "WorkoutEdit"))
+                .setNegativeButton("Ištrinti", (dialog, which) -> {
+                    DatabaseProvider.getInstance().workoutDao().delete(workout);
                     ListUpdateTracker.getInstance()
                             .getUpdateTracker()
                             .onNext(true);

@@ -11,7 +11,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import eu.vk.trackerapp.R;
-import eu.vk.trackerapp.ui.ItemFragment.OnListFragmentInteractionListener;
 import eu.vk.trackerapp.ui.model.Item;
 
 import static android.graphics.Typeface.DEFAULT_BOLD;
@@ -19,9 +18,9 @@ import static android.graphics.Typeface.DEFAULT_BOLD;
 public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHolder> {
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
     private final List<Item> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final ItemFragment.OnItemInteractionListener mListener;
 
-    public ItemListAdapter(List<Item> items, OnListFragmentInteractionListener listener) {
+    public ItemListAdapter(List<Item> items, ItemFragment.OnItemInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -52,7 +51,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHo
 
             holder.mView.setOnClickListener(v -> {
                 if (null != mListener) {
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.apply(holder.mItem);
                 }
             });
         }

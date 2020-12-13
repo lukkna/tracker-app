@@ -13,7 +13,7 @@
 
     <fragment
             android:id="@+id/nav_training"
-            android:name="eu.vk.trackerapp.ui.training.TrainingFragment"
+            android:name="eu.vk.trackerapp.ui.TrainingFragment"
             android:label="Treniruotės"
             tools:layout="@layout/fragment_training" />
 

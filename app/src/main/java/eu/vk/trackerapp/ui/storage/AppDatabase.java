@@ -5,10 +5,13 @@ import androidx.room.RoomDatabase;
 
 import eu.vk.trackerapp.ui.model.Item;
 import eu.vk.trackerapp.ui.model.User;
+import eu.vk.trackerapp.ui.model.Workout;
 
-@Database(entities = {User.class, Item.class}, version = 9)
+@Database(entities = {User.class, Item.class, Workout.class}, version = 11)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract UserDao userDao();
 
     public abstract ItemDao itemDao();
+
+    public abstract WorkoutDao workoutDao();
 }
