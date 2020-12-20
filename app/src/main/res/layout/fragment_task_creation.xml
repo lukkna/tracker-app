@@ -6,8 +6,19 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_gravity="center"
-        android:padding="20dp"
-        android:paddingTop="10dp">
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="20dp">
+
+    <EditText
+            android:id="@+id/et_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Užduotis"
+            android:paddingBottom="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_time_from"
@@ -18,7 +29,7 @@
             android:hint="Nuo"
             app:layout_constraintEnd_toStartOf="@+id/til_time_to"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/et_title">
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/actv_time_from"
@@ -41,7 +52,7 @@
             android:hint="Iki"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/til_time_from"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/et_title">
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/actv_time_to"
@@ -70,13 +81,21 @@
                 android:id="@+id/radio_button_1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Kasdien" />
+                android:text="Kasdien"/>
+        <!--                app:layout_constraintEnd_toStartOf="@id/radio_button_2"-->
+        <!--                app:layout_constraintStart_toStartOf="parent"-->
+        <!--                app:layout_constraintTop_toBottomOf="@id/til_time_from" -->
+<!--        />-->
 
         <RadioButton
                 android:id="@+id/radio_button_2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Kas savaitę" />
+                android:text="Kas savaitę"/>
+        <!--                app:layout_constraintEnd_toEndOf="parent"-->
+        <!--                app:layout_constraintStart_toEndOf="@id/radio_button_1"-->
+        <!--                app:layout_constraintTop_toBottomOf="@id/til_time_from" -->
+<!--        />-->
     </RadioGroup>
 
     <com.google.android.material.textfield.TextInputLayout

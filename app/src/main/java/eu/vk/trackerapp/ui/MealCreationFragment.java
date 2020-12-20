@@ -30,7 +30,7 @@ import static java.lang.String.format;
 import static java.util.Objects.nonNull;
 
 public class MealCreationFragment extends DialogFragment {
-    private static final String[] MEAL_TYPES = new String[]{"Paprastas", "Prieš sportą", "Po sporto"};
+    private static final String[] MEAL_TYPES = new String[]{"Įprastas", "Prieš sportą", "Po sporto"};
     private Item item;
     private RadioButton rbRepeatEveryDay;
     private RadioButton rbRepeatEveryWeek;
