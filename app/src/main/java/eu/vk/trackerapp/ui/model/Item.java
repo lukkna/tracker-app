@@ -21,49 +21,26 @@ public class Item {
     public int priority;
     @ColumnInfo(name = "title")
     public String title;
-    @ColumnInfo(name = "everyDay")
-    public boolean everyDay;
-    @ColumnInfo(name = "everyWeek")
-    public boolean everyWeek;
+    @ColumnInfo(name = "period")
+    public int period; // 0 - do not repeat, 1 - work days, 2 - weekends
     @ColumnInfo(name = "weekDay")
     public int weekDay;
-    @ColumnInfo(name = "completed")
-    public boolean completed;
     @Ignore
     public ZonedDateTime startDateTime;
     @Ignore
     public ZonedDateTime endDateTime;
 
-    public Item(long uid, String date, String startTime, String endTime, int priority, String title, boolean everyDay, boolean everyWeek, int weekDay, boolean completed) {
-        this.uid = uid;
+    public Item(String date, String startTime, String endTime, int priority, String title, int weekDay, int period) {
+        this.uid = System.currentTimeMillis();
         this.weekDay = weekDay;
         this.startDateTime = ZonedDateTime.parse(String.format("%sT%sZ", date, startTime));
         this.endDateTime = ZonedDateTime.parse(String.format("%sT%sZ", date, endTime));
         this.priority = priority;
         this.title = title;
-        this.everyDay = everyDay;
-        this.everyWeek = everyWeek;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.completed = completed;
-    }
-
-    @Ignore
-    public Item(String date, String startTime, String endTime, int priority, String title, boolean everyDay, boolean everyWeek, int weekDay, boolean completed) {
-        this(System.currentTimeMillis(), date, startTime, endTime, priority, title, everyDay, everyWeek, weekDay, completed);
-    }
-
-    @Ignore
-    public Item(ZonedDateTime startDateTime, int priority, String title, boolean everyDay, boolean everyWeek, int weekDay, boolean completed) {
-        this.uid = System.currentTimeMillis();
-        this.startDateTime = startDateTime;
-        this.priority = priority;
-        this.title = title;
-        this.everyDay = everyDay;
-        this.everyWeek = everyWeek;
-        this.completed = completed;
-        this.weekDay = weekDay;
+        this.period = period;
     }
 
     @Ignore

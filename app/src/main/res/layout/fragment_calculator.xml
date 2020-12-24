@@ -8,9 +8,10 @@
             android:id="@+id/text_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:justificationMode="inter_word"
             android:text="Kalorijų suvartojimo skaičiuoklė pagal jūsų profilio duomenis suskaičiuoja kiek turėtumėte suvartoti kcal per dieną, kad pasiektumėte norimus rezultatus."
             android:textAlignment="center"
             android:textSize="20sp"
@@ -18,47 +19,145 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-            android:id="@+id/tv_lose"
+    <LinearLayout
+            android:id="@+id/ll_lose"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="8dp"
             android:paddingTop="30dp"
-            android:text="Kalorijų skaičiuoklė"
-            android:textAlignment="center"
-            android:textSize="20sp"
+            android:weightSum="10"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_title" />
+            app:layout_constraintTop_toBottomOf="@id/text_title">
 
-    <TextView
-            android:id="@+id/tv_sustain"
+        <TextView
+                android:id="@+id/tv_lose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:drawableStart="@drawable/baseline_trending_down"
+                android:gravity="start"
+                android:text=" Numesti svorio"
+                android:textSize="20sp" />
+
+        <TextView
+                android:id="@+id/tv_lose_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center|center_vertical"
+                android:textColor="#43a047"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+        <TextView
+                android:id="@+id/tv_lose_measure"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="end"
+                android:text="kcal/dieną"
+                android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/ll_sustain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="8dp"
-            android:text="Kalorijų skaičiuoklė"
-            android:textAlignment="center"
-            android:textSize="20sp"
+            android:weightSum="10"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_lose" />
+            app:layout_constraintTop_toBottomOf="@id/ll_lose">
 
-    <TextView
-            android:id="@+id/tv_gain"
+        <TextView
+                android:id="@+id/tv_sustain"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:drawableStart="@drawable/baseline_trending_flat"
+                android:gravity="start"
+                android:text=" Palaikyti svorį"
+                android:textSize="20sp" />
+
+        <TextView
+                android:id="@+id/tv_sustain_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center|center_vertical"
+                android:textColor="#ffeb3b"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+        <TextView
+                android:id="@+id/tv_sustain_measure"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="end"
+                android:text="kcal/dieną"
+                android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/ll_gain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="8dp"
-            android:text="Kalorijų skaičiuoklė"
+            android:weightSum="10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_sustain">
+
+        <TextView
+                android:id="@+id/tv_gain"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:drawableStart="@drawable/baseline_trending_up"
+                android:gravity="start"
+                android:text=" Priaugti svorio"
+                android:textSize="20sp" />
+
+        <TextView
+                android:id="@+id/tv_gain_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center|center_vertical"
+                android:textColor="#e53935"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+        <TextView
+                android:id="@+id/tv_gain_measure"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="end"
+                android:text="kcal/dieną"
+                android:textSize="20sp" />
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/tv_empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="8dp"
+            android:text="Norint pamatyti skaičiuoklės rezultatą, reikia suvesti duomenis naudotojo profilyje"
             android:textAlignment="center"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_sustain" />
+            app:layout_constraintTop_toBottomOf="@id/ll_gain" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

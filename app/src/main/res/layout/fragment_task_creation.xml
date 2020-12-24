@@ -14,8 +14,10 @@
             android:id="@+id/et_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Užduotis"
             android:paddingBottom="20dp"
+            android:inputType="none"
+            android:enabled="false"
+            android:text="Užduotis"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -66,37 +68,26 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <RadioGroup
-            android:id="@+id/rg_repeat"
-            android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_period"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checkedButton="@+id/radio_button_1"
-            android:orientation="horizontal"
-            android:tooltipText="Kartoti"
+            android:focusableInTouchMode="false"
+            android:hint="Periodiškumas"
+            android:paddingBottom="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/til_time_from">
 
-        <RadioButton
-                android:id="@+id/radio_button_1"
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/actv_period"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Kasdien"/>
-        <!--                app:layout_constraintEnd_toStartOf="@id/radio_button_2"-->
-        <!--                app:layout_constraintStart_toStartOf="parent"-->
-        <!--                app:layout_constraintTop_toBottomOf="@id/til_time_from" -->
-<!--        />-->
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="false"
+                android:inputType="none" />
 
-        <RadioButton
-                android:id="@+id/radio_button_2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Kas savaitę"/>
-        <!--                app:layout_constraintEnd_toEndOf="parent"-->
-        <!--                app:layout_constraintStart_toEndOf="@id/radio_button_1"-->
-        <!--                app:layout_constraintTop_toBottomOf="@id/til_time_from" -->
-<!--        />-->
-    </RadioGroup>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ti_task_name"
@@ -106,7 +97,7 @@
             android:paddingBottom="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rg_repeat">
+            app:layout_constraintTop_toBottomOf="@id/til_period">
 
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_task_name"

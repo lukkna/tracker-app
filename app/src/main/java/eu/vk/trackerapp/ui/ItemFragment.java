@@ -121,7 +121,13 @@ public class ItemFragment extends Fragment {
     private List<Item> getItems() {
         return DatabaseProvider.getInstance()
                 .itemDao()
-                .queryByDate(CURRENT_DATE_STRING, CURRENT_DATE.getDayOfWeek().getValue());
+                .queryByDate(CURRENT_DATE_STRING, getTodayPeriodValue());
+    }
+
+    private int getTodayPeriodValue() {
+        if (CURRENT_DATE.getDayOfWeek().getValue() == 6 || CURRENT_DATE.getDayOfWeek().getValue() == 7)
+            return 2;
+        return 1;
     }
 
     @Override

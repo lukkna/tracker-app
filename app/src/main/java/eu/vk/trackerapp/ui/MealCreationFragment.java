@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,10 +30,6 @@ import static java.util.Objects.nonNull;
 public class MealCreationFragment extends DialogFragment {
     private static final String[] MEAL_TYPES = new String[]{"Įprastas", "Prieš sportą", "Po sporto"};
     private Item item;
-    private RadioButton rbRepeatEveryDay;
-    private RadioButton rbRepeatEveryWeek;
-    private RadioGroup rgRepeat;
-    private MaterialButton btSave;
 
     public MealCreationFragment(Item item) {
         this.item = item;
@@ -50,12 +44,10 @@ public class MealCreationFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_meal_creation, container, false);
         AutoCompleteTextView acMealType = root.findViewById(R.id.actv_meal_type);
+        AutoCompleteTextView acPeriod = root.findViewById(R.id.actv_period);
         AutoCompleteTextView acTimeFrom = root.findViewById(R.id.actv_time_from);
         AutoCompleteTextView acTimeTo = root.findViewById(R.id.actv_time_to);
-        rbRepeatEveryDay = root.findViewById(R.id.radio_button_1);
-        rbRepeatEveryWeek = root.findViewById(R.id.radio_button_2);
-        rgRepeat = root.findViewById(R.id.rg_repeat);
-        btSave = root.findViewById(R.id.bt_save);
+        MaterialButton btSave = root.findViewById(R.id.bt_save);
 
         btSave.setOnClickListener(v -> {
             if (nonNull(this.item)) {
@@ -64,8 +56,7 @@ public class MealCreationFragment extends DialogFragment {
                 item.endTime = acTimeTo.getText().toString();
                 item.priority = 0;
                 item.title = "Valgis+" + acMealType.getText().toString();
-                item.everyDay = rbRepeatEveryDay.isChecked();
-                item.everyWeek = rbRepeatEveryWeek.isChecked();
+                item.period = PeriodUtil.getPeriodIntValue(acPeriod);
                 item.weekDay = CURRENT_DATE.getDayOfWeek().getValue();
                 DatabaseProvider.getInstance()
                         .itemDao()
@@ -77,10 +68,8 @@ public class MealCreationFragment extends DialogFragment {
                         acTimeTo.getText().toString(),
                         0,
                         "Valgis+" + acMealType.getText().toString(),
-                        rbRepeatEveryDay.isChecked(),
-                        rbRepeatEveryWeek.isChecked(),
                         CURRENT_DATE.getDayOfWeek().getValue(),
-                        false
+                        1
                 );
                 DatabaseProvider.getInstance()
                         .itemDao()
@@ -113,35 +102,13 @@ public class MealCreationFragment extends DialogFragment {
                 R.layout.support_simple_spinner_dropdown_item,
                 MEAL_TYPES
         ));
-
-        rbRepeatEveryDay.setOnClickListener(v -> {
-            if (rbRepeatEveryDay.isSelected()) {
-                rbRepeatEveryDay.setSelected(false);
-                rgRepeat.clearCheck();
-                rgRepeat.clearChildFocus(rbRepeatEveryDay);
-            } else {
-                rbRepeatEveryDay.setSelected(true);
-            }
-        });
-
-        rbRepeatEveryWeek.setOnClickListener(v -> {
-            if (rbRepeatEveryWeek.isSelected()) {
-                rbRepeatEveryWeek.setSelected(false);
-                rgRepeat.clearCheck();
-                rgRepeat.clearChildFocus(rbRepeatEveryWeek);
-            } else {
-                rbRepeatEveryWeek.setSelected(true);
-            }
-        });
+        PeriodUtil.initAdapter(requireActivity(), acPeriod);
 
         if (nonNull(item)) {
             acTimeFrom.setText(item.startTime);
             acTimeTo.setText(item.endTime);
             acMealType.setText(item.title.substring(item.title.lastIndexOf('+') + 1), false);
-            if (item.everyDay)
-                rbRepeatEveryDay.setChecked(true);
-            else if (item.everyWeek)
-                rbRepeatEveryWeek.setChecked(true);
+            acPeriod.setText(PeriodUtil.getPeriodStringValue(item.period), false);
         }
 
         return root;

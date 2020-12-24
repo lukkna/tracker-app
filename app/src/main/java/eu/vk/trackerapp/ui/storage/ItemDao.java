@@ -15,8 +15,8 @@ public interface ItemDao {
     @Insert
     void insertAll(Item... items);
 
-    @Query("SELECT * FROM item WHERE date = :date OR everyDay OR (everyWeek AND weekDay = :weekDay) ORDER BY startTime ASC")
-    List<Item> queryByDate(String date, int weekDay);
+    @Query("SELECT * FROM item WHERE date = :date OR period = :period ORDER BY startTime ASC")
+    List<Item> queryByDate(String date, int period);
 
     @Delete
     void delete(Item... items);

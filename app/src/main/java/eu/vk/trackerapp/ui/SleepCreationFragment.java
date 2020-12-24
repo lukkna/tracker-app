@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
-import android.widget.RadioButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,8 +29,6 @@ import static java.util.Objects.nonNull;
 public class SleepCreationFragment extends DialogFragment {
     private Item item;
     private TimePickerDialog picker;
-    private RadioButton rbCompleted;
-    private MaterialButton btSave;
 
     public SleepCreationFragment(Item item) {
         this.item = item;
@@ -47,20 +44,16 @@ public class SleepCreationFragment extends DialogFragment {
         View root = inflater.inflate(R.layout.fragment_sleep_creation, container, false);
         AutoCompleteTextView acTimeStart = root.findViewById(R.id.actv_time_start);
         AutoCompleteTextView acTimeEnd = root.findViewById(R.id.actv_time_end);
-
-        rbCompleted = root.findViewById(R.id.radio_button_1);
-
-        btSave = root.findViewById(R.id.bt_save);
+        AutoCompleteTextView acPeriod = root.findViewById(R.id.actv_period);
+        MaterialButton btSave = root.findViewById(R.id.bt_save);
         btSave.setOnClickListener(v -> {
             if (nonNull(this.item)) {
                 item.date = CURRENT_DATE_STRING;
                 item.startTime = acTimeStart.getText().toString();
                 item.priority = 0;
                 item.title = "Miegas";
-                item.everyDay = true;
-                item.everyWeek = false;
+                item.period = PeriodUtil.getPeriodIntValue(acPeriod);
                 item.weekDay = CURRENT_DATE.getDayOfWeek().getValue();
-                item.completed = rbCompleted.isChecked();
                 DatabaseProvider.getInstance()
                         .itemDao()
                         .update(item);
@@ -71,10 +64,8 @@ public class SleepCreationFragment extends DialogFragment {
                         acTimeEnd.getText().toString(),
                         0,
                         "Miegas",
-                        true,
-                        false,
                         CURRENT_DATE.getDayOfWeek().getValue(),
-                        rbCompleted.isChecked()
+                        PeriodUtil.getPeriodIntValue(acPeriod)
                 );
                 DatabaseProvider.getInstance()
                         .itemDao()
@@ -104,11 +95,12 @@ public class SleepCreationFragment extends DialogFragment {
             picker.show();
         });
 
+        PeriodUtil.initAdapter(requireActivity(), acPeriod);
+
         if (nonNull(item)) {
             acTimeStart.setText(item.startTime);
             acTimeEnd.setText(item.endTime);
-            if (item.completed)
-                rbCompleted.setChecked(true);
+            acPeriod.setText(PeriodUtil.getPeriodStringValue(item.period));
         }
 
         return root;

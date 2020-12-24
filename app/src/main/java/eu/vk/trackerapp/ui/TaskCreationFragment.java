@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,9 +31,6 @@ import static java.util.Objects.nonNull;
 public class TaskCreationFragment extends DialogFragment {
     private static final String[] PRIORITIES = new String[]{"1 - Aukščiausias", "2", "3", "4", "5 - Žemiausias"};
     private Item item;
-    private RadioButton rbRepeatEveryDay;
-    private RadioButton rbRepeatEveryWeek;
-    private MaterialButton btSave;
     private TextInputEditText etTaskName;
 
     public TaskCreationFragment(Item item) {
@@ -51,32 +46,12 @@ public class TaskCreationFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_task_creation, container, false);
         AutoCompleteTextView acPriority = root.findViewById(R.id.actv_priority);
+        AutoCompleteTextView acPeriod = root.findViewById(R.id.actv_period);
         AutoCompleteTextView acTimeFrom = root.findViewById(R.id.actv_time_from);
         AutoCompleteTextView acTimeTo = root.findViewById(R.id.actv_time_to);
-        rbRepeatEveryDay = root.findViewById(R.id.radio_button_1);
-        rbRepeatEveryWeek = root.findViewById(R.id.radio_button_2);
-        RadioGroup rbGroup = root.findViewById(R.id.rg_repeat);
-        rbRepeatEveryDay.setOnClickListener(v -> {
-            if (rbRepeatEveryDay.isSelected()) {
-                rbRepeatEveryDay.setSelected(false);
-                rbGroup.clearCheck();
-                rbGroup.clearChildFocus(rbRepeatEveryDay);
-            } else {
-                rbRepeatEveryDay.setSelected(true);
-            }
-        });
 
-        rbRepeatEveryWeek.setOnClickListener(v -> {
-            if (rbRepeatEveryWeek.isSelected()) {
-                rbRepeatEveryWeek.setSelected(false);
-                rbGroup.clearCheck();
-                rbGroup.clearChildFocus(rbRepeatEveryWeek);
-            } else {
-                rbRepeatEveryWeek.setSelected(true);
-            }
-        });
         etTaskName = root.findViewById(R.id.et_task_name);
-        btSave = root.findViewById(R.id.bt_save);
+        MaterialButton btSave = root.findViewById(R.id.bt_save);
         btSave.setOnClickListener(v -> {
             if (nonNull(this.item)) {
                 item.date = CURRENT_DATE_STRING;
@@ -84,8 +59,7 @@ public class TaskCreationFragment extends DialogFragment {
                 item.endTime = acTimeTo.getText().toString();
                 item.priority = Integer.parseInt(acPriority.getText().toString().split(" ")[0]);
                 item.title = "Užduotis+" + etTaskName.getText().toString();
-                item.everyDay = rbRepeatEveryDay.isChecked();
-                item.everyWeek = rbRepeatEveryWeek.isChecked();
+                item.period = PeriodUtil.getPeriodIntValue(acPeriod);
                 item.weekDay = CURRENT_DATE.getDayOfWeek().getValue();
                 DatabaseProvider.getInstance()
                         .itemDao()
@@ -97,10 +71,8 @@ public class TaskCreationFragment extends DialogFragment {
                         acTimeTo.getText().toString(),
                         Integer.parseInt(acPriority.getText().toString().split(" ")[0]),
                         "Užduotis+" + etTaskName.getText().toString(),
-                        rbRepeatEveryDay.isChecked(),
-                        rbRepeatEveryWeek.isChecked(),
                         CURRENT_DATE.getDayOfWeek().getValue(),
-                        false
+                        PeriodUtil.getPeriodIntValue(acPeriod)
                 );
                 DatabaseProvider.getInstance()
                         .itemDao()
@@ -135,16 +107,15 @@ public class TaskCreationFragment extends DialogFragment {
                 PRIORITIES
         );
         acPriority.setAdapter(prioritiesAdapter);
+        PeriodUtil.initAdapter(requireActivity(), acPeriod);
+
         if (nonNull(item)) {
             acTimeFrom.setText(item.startTime);
             acTimeTo.setText(item.endTime);
             etTaskName.setText(item.title.replace("+", "~~~").split("~~~")[1]);
             if (item.priority != 0)
                 acPriority.setText(prioritiesAdapter.getItem(item.priority - 1), false);
-            if (item.everyDay)
-                rbRepeatEveryDay.setChecked(true);
-            else if (item.everyWeek)
-                rbRepeatEveryWeek.setChecked(true);
+            acPeriod.setText(PeriodUtil.getPeriodStringValue(item.period));
         }
         return root;
     }

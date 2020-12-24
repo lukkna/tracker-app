@@ -7,7 +7,7 @@ import eu.vk.trackerapp.ui.model.Item;
 import eu.vk.trackerapp.ui.model.User;
 import eu.vk.trackerapp.ui.model.Workout;
 
-@Database(entities = {User.class, Item.class, Workout.class}, version = 11)
+@Database(entities = {User.class, Item.class, Workout.class}, version = 12)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract UserDao userDao();
 
