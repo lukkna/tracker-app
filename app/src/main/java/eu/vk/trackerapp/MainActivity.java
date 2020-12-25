@@ -15,21 +15,22 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.navigation.NavigationView;
 
 import eu.vk.trackerapp.ui.ItemFragment.OnItemInteractionListener;
 import eu.vk.trackerapp.ui.MealCreationFragment;
+import eu.vk.trackerapp.ui.MeasuresFragment.OnMeasuresInteractionListener;
 import eu.vk.trackerapp.ui.SleepCreationFragment;
 import eu.vk.trackerapp.ui.TaskCreationFragment;
 import eu.vk.trackerapp.ui.TrainingFragment.OnWorkoutInteractionListener;
 import eu.vk.trackerapp.ui.UserFragment;
 import eu.vk.trackerapp.ui.WorkoutCreationFragment;
 import eu.vk.trackerapp.ui.model.Item;
+import eu.vk.trackerapp.ui.model.Measures;
 import eu.vk.trackerapp.ui.model.Workout;
 import eu.vk.trackerapp.ui.storage.DatabaseProvider;
 
-public class MainActivity extends AppCompatActivity implements OnItemInteractionListener, OnWorkoutInteractionListener {
+public class MainActivity extends AppCompatActivity implements OnItemInteractionListener, OnWorkoutInteractionListener, OnMeasuresInteractionListener {
     private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
 
@@ -39,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements OnItemInteraction
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionMenu fabMenu = findViewById(R.id.fab_menu);
 
         FloatingActionButton fabTraining = findViewById(R.id.fab_create_training);
         FloatingActionButton fabSleeping = findViewById(R.id.fab_create_sleeping);
@@ -64,8 +64,7 @@ public class MainActivity extends AppCompatActivity implements OnItemInteraction
         // menu should be considered as top level destinations.
 
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_items, R.id.nav_training, R.id.nav_calculator,
-                R.id.nav_help)
+                R.id.nav_items, R.id.nav_training, R.id.nav_calculator, R.id.nav_measures, R.id.nav_help)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -82,10 +81,8 @@ public class MainActivity extends AppCompatActivity implements OnItemInteraction
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                new UserFragment().show(getSupportFragmentManager(), "UserFragment");
-        }
+        if (item.getItemId() == R.id.action_settings)
+            new UserFragment().show(getSupportFragmentManager(), "UserFragment");
         return super.onOptionsItemSelected(item);
     }
 
@@ -124,7 +121,8 @@ public class MainActivity extends AppCompatActivity implements OnItemInteraction
         new AlertDialog.Builder(this)
                 .setTitle("Ištrinti, redaguoti ar peržiūrėti")
                 .setMessage("Ištrinti, peržiūrėti ar redaguoti įrašą?")
-                .setPositiveButton("Peržiūrėti", (dialog, which) -> new WorkoutCreationFragment(workout).show(getSupportFragmentManager(), "WorkoutEdit"))
+                .setPositiveButton("Peržiūrėti", (dialog, which) ->
+                        new WorkoutCreationFragment(workout).show(getSupportFragmentManager(), "WorkoutEdit"))
                 .setNegativeButton("Ištrinti", (dialog, which) -> {
                     DatabaseProvider.getInstance().workoutDao().delete(workout);
                     ListUpdateTracker.getInstance()
@@ -133,5 +131,15 @@ public class MainActivity extends AppCompatActivity implements OnItemInteraction
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+    }
+
+    @Override
+    public void apply(Measures measures) {
+        DatabaseProvider.getInstance()
+                .measuresDao()
+                .insertAll(measures);
+        ListUpdateTracker.getInstance()
+                .getUpdateTracker()
+                .onNext(true);
     }
 }

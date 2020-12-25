@@ -17,6 +17,10 @@
                 android:icon="@drawable/ic_menu_slideshow"
                 android:title="Skaičiuoklė" />
         <item
+                android:id="@+id/nav_measures"
+                android:icon="@drawable/ic_menu_slideshow"
+                android:title="Progresas" />
+        <item
                 android:id="@+id/nav_help"
                 android:icon="@drawable/ic_menu_manage"
                 android:title="Pagalba" />

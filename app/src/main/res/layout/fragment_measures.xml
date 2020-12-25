@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:minWidth="400dp"
+        android:orientation="vertical"
+        android:paddingTop="30dp"
+        android:paddingBottom="30dp">
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_date"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:layout_gravity="start"
+            android:foregroundGravity="left"
+            android:enabled="false"
+            android:focusableInTouchMode="false"
+            android:hint="Data"
+            android:paddingBottom="10dp">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/actv_date"
+                style="?attr/spinnerDropDownItemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/dropdownListPreferredItemHeight"
+                android:focusableInTouchMode="false"
+                android:inputType="none"
+                android:singleLine="false"
+                android:text="2020-11-29" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ti_weight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Svoris (kg)"
+            android:paddingBottom="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_weight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ti_waist_narrow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Talija (siauriausia vieta) (cm)"
+            android:paddingBottom="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_waist_narrow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ti_waist_wide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Talija (plačiausia vieta) (cm)"
+            android:paddingBottom="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_waist_wide"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ti_butt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Sėdmenys (cm)"
+            android:paddingBottom="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_butt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ti_thigh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Šlaunis (cm)"
+            android:paddingBottom="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_thigh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ti_shin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Blauzda (cm)"
+            android:paddingBottom="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_shin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ti_chest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Krūtinė (cm)"
+            android:paddingBottom="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_chest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ti_bicep"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Bicepsas (cm)"
+            android:paddingBottom="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_bicep"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ti_wrist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Riešas (cm)"
+            android:paddingBottom="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_wrist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_add_measures"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pridėti matmenis"
+            android:visibility="gone" />
+</LinearLayout>

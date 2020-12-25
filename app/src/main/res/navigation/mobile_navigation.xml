@@ -24,6 +24,12 @@
             tools:layout="@layout/fragment_calculator" />
 
     <fragment
+            android:id="@+id/nav_measures"
+            android:name="eu.vk.trackerapp.ui.MeasuresFragment"
+            android:label="Progresas"
+            tools:layout="@layout/fragment_measures_list" />
+
+    <fragment
             android:id="@+id/nav_help"
             android:name="eu.vk.trackerapp.ui.help.HelpFragment"
             android:label="Pagalba"

@@ -38,12 +38,6 @@ public class Workout {
                 name,
                 exercises.stream().map(Exercise::toStorageString).collect(joining(">"))
         );
-        System.out.println();
-    }
-
-    @Ignore
-    public Workout(String date, String name) {
-        this(System.currentTimeMillis(), date, name, "");
     }
 
     public List<Exercise> getExercises() {
