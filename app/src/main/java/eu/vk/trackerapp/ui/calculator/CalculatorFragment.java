@@ -34,9 +34,10 @@ public class CalculatorFragment extends Fragment {
                 .retrieveUser();
 
         if (nonNull(user)) {
-            tvLose.setText(String.valueOf(countCalories(user.weight, user.height, user.age) - 500));
-            tvSustain.setText(String.valueOf(countCalories(user.weight, user.height, user.age)));
-            tvGain.setText(String.valueOf(countCalories(user.weight, user.height, user.age) + 500));
+            long calories = countCalories(user.weight, user.height, user.age, user.male);
+            tvLose.setText(String.valueOf(calories - 500));
+            tvSustain.setText(String.valueOf(calories));
+            tvGain.setText(String.valueOf(calories + 500));
             tvEmpty.setVisibility(View.GONE);
             llGain.setVisibility(View.VISIBLE);
             llSustain.setVisibility(View.VISIBLE);
@@ -50,7 +51,8 @@ public class CalculatorFragment extends Fragment {
         return root;
     }
 
-    private long countCalories(double weight, int height, int age) {
-        return Math.round(((10 * weight) + (6.25 * height) - (5 * age)) * 1.25);
+    private long countCalories(double weight, int height, int age, boolean male) {
+        long calories = Math.round(((10 * weight) + (6.25 * height) - (5 * age)) * 1.25);
+        return male ? calories + 5 : calories - 161;
     }
 }
