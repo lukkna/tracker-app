@@ -1,7 +1,6 @@
 package eu.vk.trackerapp.ui;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +10,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import eu.vk.trackerapp.R;
 import eu.vk.trackerapp.ui.MeasuresFragment.OnMeasuresInteractionListener;
@@ -28,14 +30,14 @@ import static java.util.Objects.nonNull;
 public class MeasuresListAdapter extends Adapter<MeasuresListAdapter.ViewHolder> {
     private final List<Measures> measures;
     private final OnMeasuresInteractionListener listener;
-    private final Context context;
+    private final View view;
 
     public MeasuresListAdapter(List<Measures> items,
                                OnMeasuresInteractionListener listener,
-                               Context context) {
+                               View view) {
         measures = items;
         this.listener = listener;
-        this.context = context;
+        this.view = view;
     }
 
     @Override
@@ -49,20 +51,35 @@ public class MeasuresListAdapter extends Adapter<MeasuresListAdapter.ViewHolder>
     public void onBindViewHolder(final ViewHolder holder, int position) {
         if (position == 0) {
             holder.btSave.setVisibility(View.VISIBLE);
-            holder.btSave.setOnClickListener(v -> listener.apply(
-                    new Measures(
-                            holder.acDate.getText().toString(),
-                            parseViewValue(holder.tvWeight),
-                            parseViewValue(holder.tvWaistNarrow),
-                            parseViewValue(holder.tvWaistWide),
-                            parseViewValue(holder.tvButt),
-                            parseViewValue(holder.tvThigh),
-                            parseViewValue(holder.tvShin),
-                            parseViewValue(holder.tvChest),
-                            parseViewValue(holder.tvBicep),
-                            parseViewValue(holder.tvWrist)
-                    )
-            ));
+            holder.btSave.setOnClickListener(v -> {
+                if (Stream.of(holder.tvWeight,
+                        holder.tvWaistNarrow,
+                        holder.tvWaistWide,
+                        holder.tvButt,
+                        holder.tvThigh,
+                        holder.tvShin,
+                        holder.tvChest,
+                        holder.tvBicep,
+                        holder.tvWrist)
+                        .map(this::parseViewValue)
+                        .anyMatch(Objects::nonNull))
+                    listener.onCreate(
+                            new Measures(
+                                    holder.acDate.getText().toString(),
+                                    parseViewValue(holder.tvWeight),
+                                    parseViewValue(holder.tvWaistNarrow),
+                                    parseViewValue(holder.tvWaistWide),
+                                    parseViewValue(holder.tvButt),
+                                    parseViewValue(holder.tvThigh),
+                                    parseViewValue(holder.tvShin),
+                                    parseViewValue(holder.tvChest),
+                                    parseViewValue(holder.tvBicep),
+                                    parseViewValue(holder.tvWrist)
+                            )
+                    );
+                else
+                    Snackbar.make(view, "Užpildykite bent vieną matmenį!", Snackbar.LENGTH_SHORT).show();
+            });
             holder.tvWeight.setEnabled(true);
             holder.tvWaistNarrow.setEnabled(true);
             holder.tvWaistWide.setEnabled(true);
@@ -75,7 +92,7 @@ public class MeasuresListAdapter extends Adapter<MeasuresListAdapter.ViewHolder>
             LocalDate today = LocalDate.now();
             holder.acDate.setText(today.toString());
             DatePickerDialog pickerDialog = new DatePickerDialog(
-                    context,
+                    view.getContext(),
                     (v, year, month, dayOfMonth) -> holder.acDate.setText(format("%s-%02d-%02d", year, month + 1, dayOfMonth)),
                     today.getYear(),
                     today.getMonthValue() - 1,
@@ -83,7 +100,7 @@ public class MeasuresListAdapter extends Adapter<MeasuresListAdapter.ViewHolder>
             );
             holder.acDate.setEnabled(true);
             holder.acDate.setOnClickListener(view -> pickerDialog.show());
-
+            holder.btRemove.setVisibility(View.GONE);
 
         } else {
             holder.measures = measures.get(position - 1);
@@ -97,12 +114,7 @@ public class MeasuresListAdapter extends Adapter<MeasuresListAdapter.ViewHolder>
             setValueOrGone(measures.get(position - 1).bicep, holder.tvBicep, holder.tiBicep);
             setValueOrGone(measures.get(position - 1).wrist, holder.tvWrist, holder.tiWrist);
             holder.acDate.setText(measures.get(position - 1).date);
-
-            holder.mView.setOnClickListener(v -> {
-                if (null != listener) {
-                    listener.apply(holder.measures);
-                }
-            });
+            holder.btRemove.setOnClickListener(v -> listener.onRemove(measures.get(position - 1)));
         }
 
     }
@@ -151,6 +163,7 @@ public class MeasuresListAdapter extends Adapter<MeasuresListAdapter.ViewHolder>
         final TextInputLayout tiBicep;
         final TextInputLayout tiWrist;
         final MaterialButton btSave;
+        final MaterialButton btRemove;
         final AutoCompleteTextView acDate;
         Measures measures;
 
@@ -177,6 +190,7 @@ public class MeasuresListAdapter extends Adapter<MeasuresListAdapter.ViewHolder>
             tiChest = view.findViewById(R.id.ti_chest);
             tiBicep = view.findViewById(R.id.ti_bicep);
             tiWrist = view.findViewById(R.id.ti_wrist);
+            btRemove = view.findViewById(R.id.bt_remove_measures);
         }
 
         @Override

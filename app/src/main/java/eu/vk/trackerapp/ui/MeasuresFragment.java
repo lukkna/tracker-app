@@ -63,10 +63,10 @@ public class MeasuresFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MeasuresListAdapter(getMeasures(), mListener, requireContext()));
+            recyclerView.setAdapter(new MeasuresListAdapter(getMeasures(), mListener, view));
 
             subscription = ListUpdateTracker.getInstance().getUpdateTracker()
-                    .subscribe(bool -> recyclerView.setAdapter(new MeasuresListAdapter(getMeasures(), mListener, requireContext())));
+                    .subscribe(bool -> recyclerView.setAdapter(new MeasuresListAdapter(getMeasures(), mListener, view)));
         }
         return view;
     }
@@ -99,6 +99,8 @@ public class MeasuresFragment extends Fragment {
     }
 
     public interface OnMeasuresInteractionListener {
-        void apply(Measures measures);
+        void onCreate(Measures measures);
+
+        void onRemove(Measures measures);
     }
 }

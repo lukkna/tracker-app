@@ -134,10 +134,20 @@ public class MainActivity extends AppCompatActivity implements OnItemInteraction
     }
 
     @Override
-    public void apply(Measures measures) {
+    public void onCreate(Measures measures) {
         DatabaseProvider.getInstance()
                 .measuresDao()
                 .insertAll(measures);
+        ListUpdateTracker.getInstance()
+                .getUpdateTracker()
+                .onNext(true);
+    }
+
+    @Override
+    public void onRemove(Measures measures) {
+        DatabaseProvider.getInstance()
+                .measuresDao()
+                .delete(measures);
         ListUpdateTracker.getInstance()
                 .getUpdateTracker()
                 .onNext(true);

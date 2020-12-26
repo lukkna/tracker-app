@@ -30,11 +30,14 @@ public class Exercise {
 
     @Override
     public String toString() {
-        return fixedLengthString(name, 15) + " " + Optional.ofNullable(getRepetitions())
+        String s = fixedLengthString(name, 11) + " " + Optional.ofNullable(getRepetitions())
                 .filter(reps -> !reps.isEmpty())
                 .map(reps -> reps.get(0))
-                .map(rep -> fixedLengthString(rep.weight + " kg", 14) + fixedLengthString(String.valueOf(rep.repetitions), 25))
+                .map(rep -> fixedLengthString(rep.weight + " kg", 10) + fixedLengthString(String.valueOf(rep.repetitions)))
                 .orElse("");
+        System.out.println("AAAAAAAAAAA" + s.length() + "AAAAAAAAA");
+        System.out.println(s);
+        return s;
     }
 
     public String toStorageString() {
@@ -43,6 +46,10 @@ public class Exercise {
 
     public static String fixedLengthString(String string, int length) {
         return String.format("%-" + length + "." + length + "s", string);
+    }
+
+    public static String fixedLengthString(String string) {
+        return String.format("%" + 8 + "." + 8 + "s", string);
     }
 
     public static Exercise parse(String input) {

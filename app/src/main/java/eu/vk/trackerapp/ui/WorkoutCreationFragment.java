@@ -13,6 +13,7 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.button.MaterialButton;
@@ -98,11 +99,19 @@ public class WorkoutCreationFragment extends DialogFragment {
             exercises = workout.getExercises();
         }
 
-        adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_list_item_1, exercises);
+        adapter = new ArrayAdapter<>(requireActivity(), R.layout.layout_text_list_view, exercises);
         lvExercises.setAdapter(adapter);
         lvExercises.setOnItemClickListener((parent, view, position, id) -> {
-            exercises.remove(position);
-            adapter.notifyDataSetChanged();
+            new AlertDialog.Builder(requireActivity())
+                    .setTitle("Ištrinti")
+                    .setMessage("Ištrinti pratimą?")
+                    .setPositiveButton("Taip", (dialog, which) -> {
+                        exercises.remove(position);
+                        adapter.notifyDataSetChanged();
+                    })
+                    .setNegativeButton("Ne", (dialog, which) -> dialog.dismiss())
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         });
         mbAddExercise.setOnClickListener(v -> {
             new ExerciseFragment(exercise -> {

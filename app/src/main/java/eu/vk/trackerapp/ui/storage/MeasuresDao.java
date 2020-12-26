@@ -1,6 +1,7 @@
 package eu.vk.trackerapp.ui.storage;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -19,4 +20,7 @@ public interface MeasuresDao {
 
     @Update
     void update(Measures... items);
+
+    @Delete
+    void delete(Measures... items);
 }
