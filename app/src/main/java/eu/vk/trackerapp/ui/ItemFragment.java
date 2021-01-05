@@ -81,7 +81,10 @@ public class ItemFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_item_list, container, false);
         view = root.findViewById(R.id.list);
         AutoCompleteTextView acDate = root.findViewById(R.id.actv_date);
-        acDate.setText(LocalDate.now().toString());
+        LocalDate now = LocalDate.now();
+        acDate.setText(now.toString());
+        CURRENT_DATE_STRING = format("%s-%02d-%02d", now.getYear(), now.getMonthValue(), now.getDayOfMonth());
+        CURRENT_DATE = LocalDate.parse(CURRENT_DATE_STRING);
         Context context = view.getContext();
         if (mColumnCount <= 1) {
             view.setLayoutManager(new LinearLayoutManager(context));
